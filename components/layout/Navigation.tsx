@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, GalleryHorizontalEnd, Home, Leaf, Map } from "lucide-react";
+import { Building2, Home, Leaf } from "lucide-react";
 
 const links = [
   { href: "/#home", label: "Home", icon: Home },
-  { href: "/#story", label: "Story", icon: GalleryHorizontalEnd },
   { href: "/#biomimicry", label: "Bio", icon: Leaf },
-  { href: "/#planning", label: "Plan", icon: Map },
   { href: "/#projects", label: "City", icon: Building2 }
 ];
 

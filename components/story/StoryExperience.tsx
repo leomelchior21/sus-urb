@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ExternalLink, Layers3, MapPinned, Route, Sprout, Users, Zap } from "lucide-react";
+import { ExternalLink, Layers3, MapPinned, Route, Sprout, SunMedium, Users, Zap } from "lucide-react";
 import { biomimicryStories } from "@/data/biomimicry";
 import { cityProjects } from "@/data/projects";
 
@@ -17,17 +17,17 @@ const newImage = (name: string) => `/images/new/${name}`;
 
 const saoImages = [
   {
-    src: newImage("sao-paulo-aerial.jfif"),
+    src: newImage("sao-paulo-aerial.jpg"),
     label: "Density",
     copy: "A city built upward, under pressure, full of possibility."
   },
   {
-    src: newImage("sao-paulo-flood.jfif"),
+    src: newImage("sao-paulo-flood.jpg"),
     label: "Water",
     copy: "When rivers and rain meet too much concrete, infrastructure becomes visible."
   },
   {
-    src: newImage("sao-paulo-traffic.jfif"),
+    src: newImage("sao-paulo-traffic.jpg"),
     label: "Mobility",
     copy: "Every commute is also a design consequence."
   }
@@ -52,9 +52,15 @@ const processImages = [
   "/images/img-47.jpeg"
 ];
 
+const solarpunkImages = [
+  { src: newImage("solarpunk-terrace.jpg"), label: "Terraces" },
+  { src: newImage("solarpunk-sketch.jpg"), label: "Concept" },
+  { src: newImage("solarpunk-city.jpg"), label: "City" }
+];
+
 export function StoryExperience() {
   const { scrollYProgress } = useScroll();
-  const background = useTransform(scrollYProgress, [0, 0.32, 0.68, 1], ["#061912", "#0b2a20", "#123b2d", "#245b3e"]);
+  const background = useTransform(scrollYProgress, [0, 0.18, 0.42, 0.66, 1], ["#061912", "#2b0c0d", "#401715", "#123b2d", "#245b3e"]);
 
   return (
     <main className="one-page">
@@ -81,29 +87,11 @@ export function StoryExperience() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.24, duration: 0.86, ease: "easeOut" }}
           >
-            <span className="mobile-title" aria-hidden="true">SUSTAIN<br />ABLE<br />URBAN<br />IZATION</span>
-            <span className="desktop-title" aria-hidden="true">SUSTAINABLE<br />URBANIZATION</span>
+            <span aria-hidden="true">SUSTAINABLE<br />URBAN<br />IZATION</span>
           </motion.h1>
           <motion.h2 initial={{ y: 22, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.68 }}>
             Designing a Solarpunk City
           </motion.h2>
-        </motion.div>
-      </section>
-
-      <section className="snapshot-section" id="story">
-        <motion.div className="snapshot-grid" {...reveal}>
-          <div>
-            <span>24</span>
-            <p>student groups</p>
-          </div>
-          <div>
-            <span>24</span>
-            <p>sustainable interventions</p>
-          </div>
-          <div>
-            <span>1</span>
-            <p>shared urban ecosystem</p>
-          </div>
         </motion.div>
       </section>
 
@@ -172,6 +160,14 @@ export function StoryExperience() {
             <path d="M205 325 C370 415 520 415 695 325" />
             <path d="M450 120 C390 245 395 335 450 438 C505 335 510 245 450 120" />
           </svg>
+        </div>
+        <div className="solarpunk-gallery">
+          {solarpunkImages.map((image) => (
+            <motion.figure key={image.src} {...reveal}>
+              <Image src={image.src} alt={`${image.label} solarpunk visual reference.`} width={820} height={620} sizes="(max-width: 760px) 68vw, 24vw" />
+              <figcaption><SunMedium size={15} aria-hidden="true" /> {image.label}</figcaption>
+            </motion.figure>
+          ))}
         </div>
       </section>
 

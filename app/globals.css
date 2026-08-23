@@ -121,7 +121,7 @@ img {
   bottom: max(0.7rem, env(safe-area-inset-bottom));
   left: max(0.7rem, env(safe-area-inset-left));
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 40px minmax(0, 1fr);
   gap: 0.35rem;
   align-items: center;
   min-height: 64px;
@@ -139,13 +139,15 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
+  min-width: 0;
   min-height: 44px;
   border: 0;
   border-radius: 999px;
 }
 
 .nav-brand {
+  width: 40px;
+  min-width: 40px;
   background: var(--lime-soft);
   color: var(--forest-950);
   font-family: var(--font-display), system-ui, sans-serif;
@@ -157,6 +159,10 @@ img {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.2rem;
   min-width: 0;
+}
+
+.nav-link {
+  width: 100%;
 }
 
 .nav-link {
@@ -1935,5 +1941,174 @@ blockquote {
 
   .project-bento.featured {
     grid-column: span 2;
+  }
+}
+
+/* Requested polish pass */
+.nav-links {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(3, 44px);
+  justify-content: center;
+  gap: 2.1rem;
+}
+
+.nav-link {
+  flex: 0 0 44px;
+  width: 44px;
+}
+
+.glass-nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.hero-section.refined .hero-content {
+  padding-top: 8rem;
+}
+
+.hero-section.refined .hero-content h1 {
+  max-width: min(100%, 760px);
+  font-size: clamp(2.55rem, 10.8vw, 7.6rem);
+  line-height: 0.95;
+}
+
+.hero-section.refined .hero-content h2 {
+  max-width: 92vw;
+  font-size: clamp(1.15rem, 4.8vw, 2.35rem);
+}
+
+.sao-section.refined {
+  background: linear-gradient(180deg, rgba(43, 12, 13, 0.92), rgba(64, 23, 21, 0.72), rgba(18, 59, 45, 0.08));
+}
+
+.sao-editorial {
+  width: min(100% - 1.4rem, 980px);
+}
+
+.sao-card,
+.sao-card img {
+  min-height: 255px;
+}
+
+.sao-card strong {
+  font-size: clamp(1.65rem, 8vw, 4rem);
+}
+
+.bio-bento {
+  width: min(100% - 1.4rem, 980px);
+}
+
+.bio-bento-card img {
+  aspect-ratio: 4 / 3;
+  max-height: 310px;
+}
+
+.bio-bento-card h3,
+.project-bento h3 {
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  line-height: 1.05;
+}
+
+.solarpunk-gallery {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 68%;
+  gap: 0.8rem;
+  width: 100%;
+  overflow-x: auto;
+  padding: 1rem 0.7rem 5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.solarpunk-gallery figure {
+  position: relative;
+  min-height: 220px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(216, 240, 163, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  scroll-snap-align: center;
+}
+
+.solarpunk-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solarpunk-gallery figcaption {
+  position: absolute;
+  left: 0.7rem;
+  bottom: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  color: var(--forest-950);
+  background: var(--lime-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.process-strip {
+  grid-auto-columns: 62%;
+}
+
+.process-strip figure {
+  min-height: 280px;
+}
+
+.project-bento summary > span {
+  padding: 0;
+  border-radius: 0;
+  color: var(--leaf-300);
+  background: transparent;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.project-bento summary {
+  min-height: 160px;
+}
+
+@media (min-width: 720px) {
+  .hero-section.refined .hero-content h1 {
+    font-size: clamp(4.8rem, 8.6vw, 7.8rem);
+  }
+
+  .sao-card,
+  .sao-card img {
+    min-height: 320px;
+  }
+
+  .solarpunk-gallery {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(100% - 2rem, 980px);
+    margin: 0 auto;
+    overflow: visible;
+    padding-inline: 0;
+  }
+
+  .solarpunk-gallery figure {
+    min-height: 250px;
+  }
+
+  .process-strip {
+    grid-auto-columns: 24%;
+  }
+
+  .nav-link {
+    flex-basis: auto;
+    width: auto;
+    padding-inline: 0.9rem;
+  }
+
+  .nav-links {
+    grid-template-columns: repeat(3, auto);
+    gap: 2.5rem;
   }
 }
