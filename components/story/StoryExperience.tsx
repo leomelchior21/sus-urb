@@ -1,226 +1,269 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowDown, Layers3, Leaf, MapPinned, Route, Sparkles, SunMedium, Waves } from "lucide-react";
-import { CityExplorer } from "@/components/city/CityExplorer";
-import { SystemsView } from "@/components/city/SystemsView";
-import { ProjectCard } from "@/components/projects/ProjectCard";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ExternalLink, Layers3, MapPinned, Route, Sprout, Users, Zap } from "lucide-react";
 import { biomimicryStories } from "@/data/biomimicry";
-import { featuredImages, projectImages } from "@/data/images";
 import { cityProjects } from "@/data/projects";
 
 const reveal = {
-  initial: { opacity: 0, y: 32 },
+  initial: { opacity: 0, y: 26 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.7, ease: "easeOut" }
+  viewport: { once: true, margin: "-70px" },
+  transition: { duration: 0.62, ease: "easeOut" }
 } as const;
 
-const saoContrasts = [
-  { first: "DENSITY", second: "GREEN SPACE", imageIndex: 1 },
-  { first: "OPPORTUNITY", second: "INEQUALITY", imageIndex: 3 },
-  { first: "RIVERS", second: "CONCRETE", imageIndex: 0 },
-  { first: "MOBILITY", second: "LONG COMMUTES", imageIndex: 2 }
+const newImage = (name: string) => `/images/new/${name}`;
+
+const saoImages = [
+  {
+    src: newImage("sao-paulo-aerial.jfif"),
+    label: "Density",
+    copy: "A city built upward, under pressure, full of possibility."
+  },
+  {
+    src: newImage("sao-paulo-flood.jfif"),
+    label: "Water",
+    copy: "When rivers and rain meet too much concrete, infrastructure becomes visible."
+  },
+  {
+    src: newImage("sao-paulo-traffic.jfif"),
+    label: "Mobility",
+    copy: "Every commute is also a design consequence."
+  }
+];
+
+const bioImages: Record<string, string> = {
+  Honeycomb: newImage("bio-sunflower.png"),
+  Moss: newImage("bio-moss.png"),
+  Mangrove: newImage("bio-mangrove.png"),
+  Termite: newImage("bio-termite.png"),
+  Cactus: newImage("bio-cactus.png")
+};
+
+const processImages = [
+  newImage("process-sketch-1.jpeg"),
+  newImage("process-sketch-2.jpeg"),
+  newImage("process-sketch-3.jpeg"),
+  newImage("process-sketch-4.jpeg"),
+  newImage("process-model-1.jpeg"),
+  newImage("process-model-2.jpeg"),
+  "/images/img-32.jpeg",
+  "/images/img-47.jpeg"
 ];
 
 export function StoryExperience() {
-  const hero = projectImages[46];
-  const model = projectImages[31];
-  const process = projectImages.slice(0, 16);
+  const { scrollYProgress } = useScroll();
+  const background = useTransform(scrollYProgress, [0, 0.32, 0.68, 1], ["#061912", "#0b2a20", "#123b2d", "#245b3e"]);
 
   return (
-    <>
-      <main>
-        <section className="hero-section" id="home">
-          <Image className="hero-image" src={hero.src} alt="Solarpunk architectural model with green platforms and towers." width={hero.width} height={hero.height} priority sizes="100vw" />
-          <div className="hero-shade" />
-          <motion.div className="hero-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
-            <motion.p className="eyebrow" initial={{ y: 18, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15 }}>7th grade · cultural fair · maker</motion.p>
-            <motion.h1 aria-label="Sustainable Urbanization" initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ delay: 0.28, duration: 0.9, ease: "easeOut" }}>
-              <span className="mobile-title" aria-hidden="true">SUSTAIN<br />ABLE<br />URBAN<br />IZATION</span>
-              <span className="desktop-title" aria-hidden="true">SUSTAINABLE<br />URBANIZATION</span>
-            </motion.h1>
-            <motion.h2 initial={{ y: 24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.72 }}>Designing a Solarpunk City</motion.h2>
-            <motion.div className="hero-actions" initial={{ y: 24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.9 }}>
-              <Link className="glass-button filled" href="#city">Enter the city</Link>
-              <Link className="glass-button" href="#story">Discover the project</Link>
-            </motion.div>
+    <main className="one-page">
+      <motion.div className="scroll-background" style={{ backgroundColor: background }} aria-hidden="true" />
+
+      <section className="hero-section refined" id="home">
+        <Image
+          className="hero-image"
+          src={newImage("solarpunk-city.jpg")}
+          alt="Green solarpunk architectural reference with terraces and integrated vegetation."
+          width={900}
+          height={1200}
+          priority
+          sizes="100vw"
+        />
+        <div className="hero-shade" />
+        <motion.div className="hero-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
+          <motion.p className="eyebrow" initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12 }}>
+            7th grade · cultural fair · maker
+          </motion.p>
+          <motion.h1
+            aria-label="Sustainable Urbanization"
+            initial={{ y: 18, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.24, duration: 0.86, ease: "easeOut" }}
+          >
+            <span className="mobile-title" aria-hidden="true">SUSTAIN<br />ABLE<br />URBAN<br />IZATION</span>
+            <span className="desktop-title" aria-hidden="true">SUSTAINABLE<br />URBANIZATION</span>
+          </motion.h1>
+          <motion.h2 initial={{ y: 22, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.68 }}>
+            Designing a Solarpunk City
+          </motion.h2>
+        </motion.div>
+      </section>
+
+      <section className="snapshot-section" id="story">
+        <motion.div className="snapshot-grid" {...reveal}>
+          <div>
+            <span>24</span>
+            <p>student groups</p>
+          </div>
+          <div>
+            <span>24</span>
+            <p>sustainable interventions</p>
+          </div>
+          <div>
+            <span>1</span>
+            <p>shared urban ecosystem</p>
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="sao-section refined" id="sao-paulo">
+        <div className="section-heading">
+          <p className="eyebrow">Sao Paulo</p>
+          <h2>THE CITY WE HAVE</h2>
+          <p>Sao Paulo is not a simple problem. It is dense, productive, unequal, inventive, vulnerable, and alive. That complexity gave students a real place to question how cities grow.</p>
+        </div>
+        <div className="sao-editorial">
+          {saoImages.map((image, index) => (
+            <motion.article key={image.label} className={`sao-card sao-card-${index + 1}`} {...reveal}>
+              <Image src={image.src} alt={`${image.label} reference image for Sao Paulo.`} width={1100} height={760} sizes="(max-width: 760px) 92vw, 31vw" />
+              <div>
+                <strong>{image.label}</strong>
+                <p>{image.copy}</p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="golden-section refined" id="golden-circle">
+        <div className="golden-layout">
+          <motion.div className="golden-orbit" {...reveal}>
+            <span className="orbit-ring outer" />
+            <span className="orbit-ring middle" />
+            <span className="orbit-ring inner" />
+            <div className="orbit-core">CITY</div>
+            <div className="orbit-label why">WHY<br /><b>Solarpunk</b></div>
+            <div className="orbit-label how">HOW<br /><b>Biomimicry</b></div>
+            <div className="orbit-label what">WHAT<br /><b>Urbanization</b></div>
           </motion.div>
-          <motion.div className="hero-panel liquid-glass" initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.05, type: "spring", stiffness: 120 }}>
-            <span>24 groups</span>
-            <span>3 classes</span>
-            <span>1 city</span>
+          <motion.div className="golden-text" {...reveal}>
+            <p className="eyebrow">Golden circle</p>
+            <h2>WHY, HOW, WHAT.</h2>
+            <p>The project moves from vision to method to city-making: imagine a better future, learn from nature, then connect every intervention into one urban system.</p>
           </motion.div>
-          <ArrowDown className="scroll-cue" aria-hidden="true" />
-        </section>
+        </div>
+      </section>
 
-        <section className="scale-section" id="story">
-          <motion.div {...reveal}>
-            <p>24 GROUPS.</p>
-            <p>24 STRUCTURES.</p>
-            <p>ONE CITY.</p>
+      <section className="solarpunk-section" id="solarpunk">
+        <div className="section-heading dark">
+          <p className="eyebrow">Why?</p>
+          <h2>SOLARPUNK</h2>
+          <p>Solarpunk is an optimistic design lens. It asks how people, ecosystems, and clean energy can support each other in everyday urban life.</p>
+        </div>
+        <div className="pillar-stage" aria-label="Human, nature, and energy pillars animation">
+          <motion.div className="pillar human" whileInView={{ y: [18, -8, 18] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
+            <Users aria-hidden="true" />
+            <span>Human</span>
+            <p>inclusive spaces, comfort, access, community</p>
           </motion.div>
-          <motion.div className="manifesto" {...reveal}>
-            <span>THE BUILDING IS NOT THE PROJECT.</span>
-            <strong>THE CITY IS THE PROJECT.</strong>
+          <motion.div className="pillar nature" whileInView={{ y: [-10, 16, -10] }} transition={{ duration: 5.6, repeat: Infinity, ease: "easeInOut" }}>
+            <Sprout aria-hidden="true" />
+            <span>Nature</span>
+            <p>shade, water, biodiversity, living surfaces</p>
           </motion.div>
-        </section>
+          <motion.div className="pillar energy" whileInView={{ y: [12, -14, 12] }} transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}>
+            <Zap aria-hidden="true" />
+            <span>Energy</span>
+            <p>solar power, passive cooling, efficient systems</p>
+          </motion.div>
+          <svg viewBox="0 0 900 520" className="pillar-lines" aria-hidden="true">
+            <path d="M180 305 C310 150 590 150 720 305" />
+            <path d="M205 325 C370 415 520 415 695 325" />
+            <path d="M450 120 C390 245 395 335 450 438 C505 335 510 245 450 120" />
+          </svg>
+        </div>
+      </section>
 
-        <section className="sao-section">
-          <div className="section-heading">
-            <p className="eyebrow">Sao Paulo</p>
-            <h2>THE CITY WE HAVE</h2>
-            <p>Sao Paulo is a city of contradictions: density and opportunity, but also heat, long trips, pressure on infrastructure, unequal access to public space, and rivers forced into concrete systems.</p>
-          </div>
-          <div className="contrast-grid">
-            {saoContrasts.map((contrast) => {
-              const image = featuredImages[contrast.imageIndex];
-              return (
-              <motion.article key={`${contrast.first}-${contrast.second}`} className="contrast-panel" {...reveal}>
-                <Image src={image.src} alt={`Visual comparison for ${contrast.first} and ${contrast.second}`} width={900} height={1200} sizes="(max-width: 720px) 92vw, 25vw" />
-                <div><span>{contrast.first}</span><span>vs</span><strong>{contrast.second}</strong></div>
-              </motion.article>
-              );
-            })}
-          </div>
-          <div className="question-band">
-            <p>IF WE COULD DESIGN PART OF A CITY AGAIN...</p>
-            <h2>WHAT WOULD WE DO DIFFERENTLY?</h2>
-          </div>
-        </section>
+      <section className="bio-section refined" id="biomimicry">
+        <div className="section-heading">
+          <p className="eyebrow">How?</p>
+          <h2>BIOMIMICRY</h2>
+          <p>Nature becomes a design teacher: organisms, patterns, and ecosystems suggest strategies for comfort, resilience, structure, and adaptation.</p>
+          <a className="deep-dive-link" href="https://biomimi.vercel.app/" target="_blank" rel="noreferrer">
+            Open biomimicry deep dive <ExternalLink size={17} aria-hidden="true" />
+          </a>
+        </div>
+        <div className="bio-bento">
+          {biomimicryStories.map((story) => (
+            <motion.article key={story.name} className="bio-bento-card" {...reveal}>
+              <Image src={bioImages[story.name]} alt={`${story.name} biomimicry reference.`} width={900} height={900} sizes="(max-width: 760px) 88vw, 28vw" />
+              <div>
+                <h3>{story.title}</h3>
+                <p>{story.principle}</p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
 
-        <section className="golden-section">
-          <div className="golden-stage">
-            <motion.div className="ring ring-one" whileInView={{ scale: 1, opacity: 1 }} initial={{ scale: 0.45, opacity: 0 }} viewport={{ once: true }} />
-            <motion.div className="ring ring-two" whileInView={{ scale: 1, opacity: 1 }} initial={{ scale: 0.45, opacity: 0 }} viewport={{ once: true }} transition={{ delay: 0.18 }} />
-            <motion.div className="ring ring-three" whileInView={{ scale: 1, opacity: 1 }} initial={{ scale: 0.45, opacity: 0 }} viewport={{ once: true }} transition={{ delay: 0.36 }} />
-            <div className="golden-copy">
-              <span>WHY · Solarpunk</span>
-              <span>HOW · Biomimicry</span>
-              <span>WHAT · Sustainable Urbanization</span>
-            </div>
-          </div>
-        </section>
+      <section className="planning-section refined" id="planning">
+        <div className="section-heading">
+          <p className="eyebrow">Planning</p>
+          <h2>A CITY NEEDS A PLAN</h2>
+          <p>Sustainable urbanization connects land use, shade, water, mobility, energy, policy, and daily life. A building only works when the city around it works too.</p>
+        </div>
+        <div className="planning-grid refined">
+          <article className="diagram-panel">
+            <Layers3 aria-hidden="true" />
+            <h3>Urban layers</h3>
+            {["Housing", "Work", "Commerce", "Services", "Green Areas", "Mobility", "Water", "Energy", "Public Space"].map((layer) => <span key={layer}>{layer}</span>)}
+          </article>
+          <article className="zoning-panel">
+            <Route aria-hidden="true" />
+            <h3>What goes where?</h3>
+            <div className="commute-line long" />
+            <p>Separated uses create longer trips.</p>
+            <div className="commute-line short" />
+            <p>Mixed-use planning shortens movement and activates public space.</p>
+          </article>
+          <article className="diagram-panel">
+            <MapPinned aria-hidden="true" />
+            <h3>Master Plan</h3>
+            {["growth", "land use", "housing", "mobility", "environment", "infrastructure"].map((layer) => <span key={layer}>{layer}</span>)}
+          </article>
+        </div>
+      </section>
 
-        <section className="why-section">
-          <div className="section-heading dark">
-            <p className="eyebrow">Why?</p>
-            <h2>SOLARPUNK</h2>
-            <p>Because imagining a better future changes how we design today. Solarpunk is not only a look; it is a philosophy of renewable energy, biodiversity, inclusion, appropriate technology, and community-centered cities.</p>
-          </div>
-          <div className="principle-row">
-            {["optimism", "renewable energy", "public space", "biodiversity", "local solutions"].map((item) => <span key={item}>{item}</span>)}
-          </div>
-          <blockquote>What future do we want to build?</blockquote>
-        </section>
+      <section className="process-section refined" id="process">
+        <div className="section-heading dark">
+          <p className="eyebrow">Maker process</p>
+          <h2>FROM SKETCH TO CITY MODEL</h2>
+          <p>Students moved between drawings, references, material tests, and physical models to turn sustainable ideas into an urban proposal.</p>
+        </div>
+        <div className="process-strip">
+          {processImages.map((src, index) => (
+            <motion.figure key={src} className={index === 2 || index === 6 ? "wide" : ""} {...reveal}>
+              <Image src={src} alt="Student sketch or model-building process for the solarpunk city project." width={1000} height={760} sizes="(max-width: 760px) 72vw, 24vw" />
+            </motion.figure>
+          ))}
+        </div>
+      </section>
 
-        <section className="bio-section">
-          <div className="section-heading">
-            <p className="eyebrow">How?</p>
-            <h2>BIOMIMICRY</h2>
-            <p>Nature already solved many design problems. Students translated natural strategies into architecture, infrastructure, and public space.</p>
-          </div>
-          <div className="bio-stack">
-            {biomimicryStories.map((story, index) => {
-              const image = projectImages[story.imageIndex - 1];
-              return (
-                <motion.article key={story.name} className="bio-panel" {...reveal}>
-                  <Image src={image.src} alt={`${story.name} inspiration shown through project material.`} width={image.width} height={image.height} sizes="(max-width: 720px) 100vw, 42vw" />
-                  <div className="bio-info liquid-glass">
-                    <p className="eyebrow">0{index + 1} · {story.name}</p>
-                    <h3>{story.title}</h3>
-                    <p>{story.principle}</p>
-                    <div className="mini-list">{story.translation.map((item) => <span key={item}>{item}</span>)}</div>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="planning-section">
-          <div className="section-heading">
-            <p className="eyebrow">Planning</p>
-            <h2>A CITY NEEDS A PLAN</h2>
-            <p>Buildings are only one layer. Sustainable urbanization connects land use, shade, water, mobility, energy, public policy, and daily life.</p>
-          </div>
-          <div className="planning-grid">
-            <article className="diagram-panel">
-              <Layers3 aria-hidden="true" />
-              <h3>Urban layers</h3>
-              {["Housing", "Work", "Commerce", "Services", "Green Areas", "Mobility", "Water", "Energy", "Public Space"].map((layer) => <span key={layer}>{layer}</span>)}
-            </article>
-            <article className="zoning-panel">
-              <Route aria-hidden="true" />
-              <h3>What goes where?</h3>
-              <div className="commute-line long" />
-              <p>Separated uses create longer trips.</p>
-              <div className="commute-line short" />
-              <p>Mixed-use planning shortens movement and activates public space.</p>
-            </article>
-            <article className="diagram-panel">
-              <MapPinned aria-hidden="true" />
-              <h3>Plano Diretor</h3>
-              {["growth", "land use", "housing", "mobility", "environment", "infrastructure"].map((layer) => <span key={layer}>{layer}</span>)}
-            </article>
-          </div>
-        </section>
-
-        <section className="process-section">
-          <div className="section-heading dark">
-            <p className="eyebrow">Maker process</p>
-            <h2>FROM OBSERVATION TO CITY MODEL</h2>
-          </div>
-          <div className="process-collage">
-            {process.map((image, index) => (
-              <motion.figure key={image.id} className={index % 3 === 0 ? "tall" : ""} {...reveal}>
-                <Image src={image.src} alt={image.alt} width={image.width} height={image.height} sizes="(max-width: 720px) 45vw, 18vw" />
-                <figcaption>{String(index + 1).padStart(2, "0")}</figcaption>
-              </motion.figure>
-            ))}
-          </div>
-        </section>
-
-        <section className="mosaic-section">
-          <div className="mosaic">
-            {projectImages.slice(16, 40).map((image) => <Image key={image.id} src={image.src} alt={image.alt} width={image.width} height={image.height} sizes="20vw" />)}
-          </div>
-          <div className="mosaic-copy">
-            <span>24 PROJECTS.</span>
-            <strong>ONE CITY.</strong>
-          </div>
-        </section>
-
-        <CityExplorer />
-        <SystemsView />
-
-        <section className="projects-teaser">
-          <div className="section-heading">
-            <p className="eyebrow">24 student projects</p>
-            <h2>EACH INTERVENTION HAS A ROLE.</h2>
-          </div>
-          <div className="project-card-grid">
-            {cityProjects.slice(0, 6).map((project) => <ProjectCard project={project} key={project.id} />)}
-          </div>
-          <Link className="glass-button filled" href="/projects">See all projects</Link>
-        </section>
-
-        <section className="final-section">
-          <Image src={model.src} alt="Tall interconnected city model with green terraces and SDG backdrop." width={model.width} height={model.height} sizes="100vw" />
-          <div className="final-copy">
-            <p>Not one technology. Not one green wall. Not one solar panel.</p>
-            <h2>IT IS HOW EVERYTHING CONNECTS.</h2>
-            <strong>THE BUILDING IS NOT THE PROJECT.<br />THE CITY IS THE PROJECT.</strong>
-            <Link className="glass-button filled" href="#city">Explore the city again</Link>
-          </div>
-          <SunMedium className="final-icon sun" aria-hidden="true" />
-          <Waves className="final-icon waves" aria-hidden="true" />
-          <Leaf className="final-icon leaf" aria-hidden="true" />
-          <Sparkles className="final-icon spark" aria-hidden="true" />
-        </section>
-      </main>
-    </>
+      <section className="projects-teaser refined" id="projects">
+        <div className="section-heading">
+          <p className="eyebrow">24 ideas · one city</p>
+          <h2>OUR SOLARPUNK CITY</h2>
+        </div>
+        <div className="project-bento-grid">
+          {cityProjects.map((project, index) => (
+            <motion.details key={project.id} className={`project-bento ${index % 7 === 0 ? "featured" : ""}`} {...reveal}>
+              <summary>
+                <span>{project.biomimicry}</span>
+                <h3>{project.projectName}</h3>
+                <p>{project.students}</p>
+              </summary>
+              <div className="project-bento-body">
+                <p>{project.solution}</p>
+                <div>
+                  {project.systems.map((system) => <span key={system}>{system}</span>)}
+                  {project.sdgs.map((sdg) => <span key={sdg}>SDG {sdg}</span>)}
+                </div>
+              </div>
+            </motion.details>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }

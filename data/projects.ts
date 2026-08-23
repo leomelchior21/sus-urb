@@ -15,6 +15,7 @@ export interface CityProject {
   urbanFunction: string[];
   systems: System[];
   sdgs: number[];
+  students: string;
   sustainabilityStrategies: string[];
   heroImage?: string;
   galleryImages?: string[];
@@ -40,7 +41,34 @@ const positions = [
   [81, 77], [12, 35], [51, 15], [91, 28], [35, 88], [58, 89], [75, 90], [8, 82]
 ] as const;
 
-const records: Omit<CityProject, "id" | "cityPosition" | "sustainabilityStrategies" | "heroImage" | "galleryImages" | "finalModelImages" | "sketchImages">[] = [
+const studentNames = [
+  "Joao Pedro R. Boscoli, Maria Isabela B. Braz, Olivia C. Moussalli",
+  "Gianluca Z. Alvarenga, Luiz Henrique R. Abdo, Miguel E. Magalhaes",
+  "Anandi R. R. Guastelli, Isabela R. Campos, Laura A. Akkari, Maria Pia S. Azenha, Valentina K. Severini",
+  "Lucca F. H. Silva, Rafael A. M. C. Picolo, Theo G. Montanari",
+  "Felipe F. Freire, Matheus J. Uejima, Maximo O. Foletto",
+  "Bruno S. Soares, Henrique C. Gracio, Isabella S. Souza",
+  "Gustavo P. Almendra, Joao A. Marinho, Julia M. Mourao, Pedro C. Kalili, Sofia C. Antunes",
+  "Clara P. Gesteira, Gabriela B. Souza, Maria Eduarda B. Moreira",
+  "Andre M. Nogueira, Bernardo L. H. Oliveira, Gabriel A. T. Gama",
+  "Henrique M. F. Melo, Jose M. Borges, Luiz Felipe Z. Manssur",
+  "Clara E. Tranjan, Gabriella R. Stamato, Martina B. C. Negrini, Pietra P. Farias, Valentina B. Cais",
+  "Beatriz N. Frayha, Helena T. Frayha, Luisa K. Yunes",
+  "Alicia Q. Cid, Bella A. Mattei, Carolina L. T. Loureiro, Martin B. P. O. Ribeiro",
+  "Cecilia G. P. Santos, Leonardo M. Barone, Olivia T. Feneberg",
+  "Guilherme J. Marangoni, Joao Paulo R. Abutara, Joao Paulo R. C. Goto, Lucas C. Mayer, Pedro M. Diniz",
+  "Antonietta Z. R. Freitas, Marcella S. Jafet, Maria Luisa G. Ferraz, Maria Luiza M. Fioravanti, Sophia M. Guerreiro",
+  "Beatriz B. Saad, Gabriela T. N. Martinez, Giovanna M. Figueiredo, Manuela P. Medici",
+  "Camila R. Avian, Isabela M. Rocha, Maria Antonia C. Lobao",
+  "Antonio S. Ceravolo, Guilherme B. Souza, Lorenzo F. M. G. Nascimento, Rafael G. Maluhy, Stefano K. Carotta",
+  "Ana Luiza Z. Haddad, Cecilia T. G. Ricciardi",
+  "Bernardo M. B. Montenegro, Eduardo D., Francesco M. D'ippolito",
+  "Alice P. Gesteira, Andre C. Alves, George F. Abissamra, Isabella O. Miceli, Manuela L. Cassins",
+  "Carolina A. Gusmao, Olivia S. Barone, Tereza S. C. Dias",
+  "Michel K. Maalouli, Rafael R. Diomelli, Theo P. B. M. Calfat"
+];
+
+const records: Omit<CityProject, "id" | "students" | "cityPosition" | "sustainabilityStrategies" | "heroImage" | "galleryImages" | "finalModelImages" | "sketchImages">[] = [
   {
     projectName: "Termite Apartment Commons",
     className: "7A",
@@ -314,6 +342,7 @@ export const cityProjects: CityProject[] = records.map((record, idx) => {
   return {
     ...record,
     id,
+    students: studentNames[idx],
     cityPosition: { x: positions[idx][0], y: positions[idx][1] },
     sustainabilityStrategies: baseStrategies[record.biomimicry],
     heroImage: galleryImages[0],
