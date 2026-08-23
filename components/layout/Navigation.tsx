@@ -5,7 +5,7 @@ import { Building2, Home, Leaf, MapPinned } from "lucide-react";
 
 const links = [
   { href: "/#home", label: "Home", icon: Home },
-  { href: "/#sao-paulo", label: "SP", icon: MapPinned },
+  { href: "/#sao-paulo", label: "São Paulo", icon: MapPinned },
   { href: "/#biomimicry", label: "Bio", icon: Leaf },
   { href: "/#projects", label: "City", icon: Building2 }
 ];

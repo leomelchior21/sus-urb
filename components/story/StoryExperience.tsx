@@ -60,6 +60,25 @@ const solarpunkImages = [
 ];
 
 type QuestionTopic = "Sustainable Urbanization" | "Solarpunk" | "Biomimicry" | "SDGs / ODS" | "Projects";
+type QuestionLanguage = "en" | "pt";
+type SourceLink = { label: string; href?: string };
+
+const topicLabels: Record<QuestionLanguage, Record<QuestionTopic, string>> = {
+  en: {
+    "Sustainable Urbanization": "Sustainable Urbanization",
+    Solarpunk: "Solarpunk",
+    Biomimicry: "Biomimicry",
+    "SDGs / ODS": "SDGs / ODS",
+    Projects: "Projects"
+  },
+  pt: {
+    "Sustainable Urbanization": "Urbanização Sustentável",
+    Solarpunk: "Solarpunk",
+    Biomimicry: "Biomimética",
+    "SDGs / ODS": "ODS",
+    Projects: "Projetos"
+  }
+};
 
 const questionBank: Record<QuestionTopic, string[]> = {
   "Sustainable Urbanization": [
@@ -72,7 +91,7 @@ const questionBank: Record<QuestionTopic, string[]> = {
     "How can the way we use land affect flooding and rainwater absorption?",
     "Why are public spaces important when planning a sustainable city?",
     "How can a city balance the needs of people, nature, and infrastructure?",
-    "If you could change one thing about Sao Paulo to make it more sustainable, what would you change and why?"
+    "If you could change one thing about São Paulo to make it more sustainable, what would you change and why?"
   ],
   Solarpunk: [
     "What is Solarpunk, and what kind of future does it imagine?",
@@ -108,7 +127,7 @@ const questionBank: Record<QuestionTopic, string[]> = {
     "Choose one feature of our city and explain which SDG it could help achieve.",
     "Can one project contribute to more than one SDG? Give an example and explain how.",
     "Why can't governments achieve the SDGs only by building new technology?",
-    "If you had to choose one SDG as the most important for Sao Paulo today, which would you choose and why?"
+    "If you had to choose one SDG as the most important for São Paulo today, which would you choose and why?"
   ],
   Projects: [
     "What urban problem is your group trying to solve, and how does your project respond to it?",
@@ -119,8 +138,71 @@ const questionBank: Record<QuestionTopic, string[]> = {
     "Which SDG is most connected to your project, and how does your solution contribute to it?",
     "Why did your group place this project in this part of the city?",
     "How does your project affect or connect with the buildings and spaces around it?",
-    "If your project were actually built in Sao Paulo, what benefits could it bring and what challenges might it face?",
+    "If your project were actually built in São Paulo, what benefits could it bring and what challenges might it face?",
     "If your group had one more month to improve the project, what would you change and why?"
+  ]
+};
+
+const questionBankPt: Record<QuestionTopic, string[]> = {
+  "Sustainable Urbanization": [
+    "O que torna uma cidade sustentável além de ter prédios verdes?",
+    "Por que é importante pensar na cidade inteira em vez de projetar apenas um prédio?",
+    "Como a localização de um edifício pode afetar o transporte e a vida diária das pessoas?",
+    "Por que uma cidade sustentável precisa de diferentes tipos de espaço, como moradia, trabalho, serviços e áreas verdes?",
+    "Como acrescentar mais vegetação pode mudar a temperatura e o conforto de uma cidade?",
+    "O que pode acontecer se uma cidade cresce sem planejamento suficiente?",
+    "Como o uso do solo pode afetar enchentes e a absorção da água da chuva?",
+    "Por que os espaços públicos são importantes no planejamento de uma cidade sustentável?",
+    "Como uma cidade pode equilibrar as necessidades das pessoas, da natureza e da infraestrutura?",
+    "Se você pudesse mudar uma coisa em São Paulo para torná-la mais sustentável, o que mudaria e por quê?"
+  ],
+  Solarpunk: [
+    "O que é Solarpunk e que tipo de futuro ele imagina?",
+    "Como uma cidade Solarpunk é diferente de uma cidade futurista comum que vemos nos filmes?",
+    "Por que a natureza é uma parte importante do movimento Solarpunk?",
+    "Qual é o papel da tecnologia em uma cidade Solarpunk?",
+    "Por que Solarpunk é mais do que apenas colocar plantas nos prédios?",
+    "Como a arquitetura pode ajudar a criar o futuro otimista imaginado pelo Solarpunk?",
+    "Qual ideia Solarpunk você consegue identificar no nosso modelo de cidade? Explique.",
+    "Como uma cidade Solarpunk poderia melhorar a qualidade de vida das pessoas?",
+    "Por que comunidade e espaços públicos compartilhados são importantes no Solarpunk?",
+    "Se você pudesse acrescentar uma nova ideia Solarpunk à nossa cidade, o que criaria e por quê?"
+  ],
+  Biomimicry: [
+    "O que é biomimética e como ela é diferente de apenas fazer um prédio parecer natureza?",
+    "Por que a natureza pode ser uma fonte útil de ideias para arquitetos e engenheiros?",
+    "Como estudar o funcionamento de um organismo pode nos ajudar a resolver um problema urbano?",
+    "Como estruturas em formato de colmeia podem inspirar a organização de espaços arquitetônicos?",
+    "Como o musgo pode inspirar uma forma diferente de pensar as paredes de um edifício?",
+    "O que arquitetos podem aprender com raízes de mangue ao projetar estruturas?",
+    "Como cupinzeiros podem inspirar edifícios que ficam confortáveis usando menos ar-condicionado?",
+    "O que formas de cactos podem nos ensinar sobre proteger edifícios do sol forte e do calor?",
+    "Escolha um exemplo de biomimética do nosso projeto. Qual estratégia natural foi copiada e que problema ela resolve?",
+    "Se você pudesse estudar outra planta ou animal para melhorar uma cidade, o que escolheria e o que poderíamos aprender?"
+  ],
+  "SDGs / ODS": [
+    "O que são os Objetivos de Desenvolvimento Sustentável e por que eles foram criados?",
+    "Qual ODS está mais conectado ao nosso projeto de Urbanização Sustentável? Por quê?",
+    "Como uma meta global, como um ODS, pode influenciar uma decisão em um bairro ou edifício?",
+    "O que o ODS 11 - Cidades e Comunidades Sustentáveis - significa na prática?",
+    "Como energia limpa pode ajudar uma cidade a alcançar alguns ODS?",
+    "Como problemas ambientais e sociais se conectam nos ODS?",
+    "Escolha uma característica da nossa cidade e explique qual ODS ela poderia ajudar a alcançar.",
+    "Um projeto pode contribuir para mais de um ODS? Dê um exemplo e explique como.",
+    "Por que governos não conseguem alcançar os ODS apenas construindo novas tecnologias?",
+    "Se você tivesse que escolher um ODS como o mais importante para São Paulo hoje, qual escolheria e por quê?"
+  ],
+  Projects: [
+    "Qual problema urbano o seu grupo está tentando resolver e como o projeto responde a ele?",
+    "Explique seu projeto como se eu nunca tivesse visto antes. O que ele faz e por que é importante?",
+    "Qual é a característica mais sustentável do seu projeto e por que o grupo a escolheu?",
+    "Qual ideia de biomimética seu grupo usou e como ela virou uma solução arquitetônica?",
+    "Como seu projeto se conecta ao movimento Solarpunk?",
+    "Qual ODS está mais conectado ao seu projeto e como a solução contribui para ele?",
+    "Por que o seu grupo colocou esse projeto nessa parte da cidade?",
+    "Como seu projeto afeta ou se conecta aos edifícios e espaços ao redor?",
+    "Se o projeto fosse construído em São Paulo, quais benefícios ele poderia trazer e quais desafios poderia enfrentar?",
+    "Se o grupo tivesse mais um mês para melhorar o projeto, o que mudaria e por quê?"
   ]
 };
 
@@ -157,9 +239,30 @@ const odsOptions = [
   }
 ];
 
+function SectionSources({ sources }: { sources: SourceLink[] }) {
+  return (
+    <p className="section-sources">
+      <span>Sources:</span>{" "}
+      {sources.map((source, index) => (
+        <span key={source.label}>
+          {source.href ? (
+            <a href={source.href} target="_blank" rel="noreferrer">
+              {source.label}
+            </a>
+          ) : (
+            source.label
+          )}
+          {index < sources.length - 1 ? " · " : ""}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
   const [questionIndex, setQuestionIndex] = useState<number | null>(null);
-  const questions = questionBank[topic];
+  const [language, setLanguage] = useState<QuestionLanguage>("en");
+  const questions = language === "en" ? questionBank[topic] : questionBankPt[topic];
 
   function drawQuestion() {
     setQuestionIndex((current) => {
@@ -174,15 +277,29 @@ function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
 
   return (
     <motion.div className="question-block" {...reveal}>
-      <button className="question-button" type="button" onClick={drawQuestion}>
-        <Sparkles size={18} aria-hidden="true" />
-        Ask a guiding question
-      </button>
+      <div className="question-toolbar">
+        <button className="question-button" type="button" onClick={drawQuestion}>
+          <Sparkles size={18} aria-hidden="true" />
+          {language === "en" ? "Ask a guiding question" : "Abrir pergunta-guia"}
+        </button>
+        <div className="question-language" aria-label="Question language">
+          {(["en", "pt"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={language === option ? "active" : ""}
+              onClick={() => setLanguage(option)}
+            >
+              {option === "en" ? "EN" : "PT-BR"}
+            </button>
+          ))}
+        </div>
+      </div>
       {questionIndex !== null ? (
         <motion.div className="question-card" initial={{ opacity: 0, y: 12, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} key={`${topic}-${questionIndex}`}>
           <HelpCircle size={22} aria-hidden="true" />
           <div>
-            <span>{topic}</span>
+            <span>{topicLabels[language][topic]}</span>
             <p>{questions[questionIndex]}</p>
           </div>
         </motion.div>
@@ -194,7 +311,7 @@ function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
 export function StoryExperience() {
   const [activeOds, setActiveOds] = useState(odsOptions[0]);
   const { scrollYProgress } = useScroll();
-  const background = useTransform(scrollYProgress, [0, 0.16, 0.28, 0.4, 1], ["#061912", "#2b0c0d", "#143326", "#174d36", "#245b3e"]);
+  const background = useTransform(scrollYProgress, [0, 0.16, 0.28, 0.58, 0.78, 1], ["#061912", "#2b0c0d", "#143326", "#174d36", "#174d36", "#123a5a"]);
 
   return (
     <main className="one-page">
@@ -227,18 +344,19 @@ export function StoryExperience() {
             Designing a Solarpunk City
           </motion.h2>
         </motion.div>
+        <SectionSources sources={[{ label: "student visual reference set" }]} />
       </section>
 
       <section className="sao-section refined" id="sao-paulo">
         <div className="section-heading">
-          <p className="eyebrow">Sao Paulo</p>
+          <p className="eyebrow">São Paulo</p>
           <h2>THE CITY WE HAVE</h2>
-          <p>Sao Paulo is not a simple problem. It is dense, productive, unequal, inventive, vulnerable, and alive. That complexity gave students a real place to question how cities grow.</p>
+          <p>São Paulo is not a simple problem. It is dense, productive, unequal, inventive, vulnerable, and alive. That complexity gave students a real place to question how cities grow.</p>
         </div>
         <div className="sao-editorial">
           {saoImages.map((image, index) => (
             <motion.article key={image.label} className={`sao-card sao-card-${index + 1}`} {...reveal}>
-              <Image src={image.src} alt={`${image.label} reference image for Sao Paulo.`} width={1100} height={760} sizes="(max-width: 760px) 92vw, 31vw" />
+              <Image src={image.src} alt={`${image.label} reference image for São Paulo.`} width={1100} height={760} sizes="(max-width: 760px) 92vw, 31vw" />
               <div>
                 <strong>{image.label}</strong>
                 <p>{image.copy}</p>
@@ -247,6 +365,12 @@ export function StoryExperience() {
           ))}
         </div>
         <GuidingQuestion topic="Sustainable Urbanization" />
+        <SectionSources
+          sources={[
+            { label: "São Paulo Master Plan / PDE", href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
+            { label: "student image set" }
+          ]}
+        />
       </section>
 
       <section className="golden-section refined" id="golden-circle">
@@ -266,6 +390,7 @@ export function StoryExperience() {
             <p>The project moves from vision to method to city-making: imagine a better future, learn from nature, then connect every intervention into one urban system.</p>
           </motion.div>
         </div>
+        <SectionSources sources={[{ label: "Simon Sinek, The Golden Circle", href: "https://simonsinek.com/golden-circle" }]} />
       </section>
 
       <section className="solarpunk-section" id="solarpunk">
@@ -305,6 +430,13 @@ export function StoryExperience() {
           ))}
         </div>
         <GuidingQuestion topic="Solarpunk" />
+        <SectionSources
+          sources={[
+            { label: "A Solarpunk Manifesto", href: "https://re-des.org/a-solarpunk-manifesto/" },
+            { label: "Project Hieroglyph solarpunk notes", href: "https://hieroglyph.asu.edu/2014/09/solarpunk-notes-toward-a-manifesto/" },
+            { label: "student image set" }
+          ]}
+        />
       </section>
 
       <section className="bio-section refined" id="biomimicry">
@@ -328,12 +460,19 @@ export function StoryExperience() {
           ))}
         </div>
         <GuidingQuestion topic="Biomimicry" />
+        <SectionSources
+          sources={[
+            { label: "The Biomimicry Institute", href: "https://biomimicry.org/inspiration/what-is-biomimicry/" },
+            { label: "biomimicry deep dive", href: "https://biomimi.vercel.app/" },
+            { label: "student image set" }
+          ]}
+        />
       </section>
 
       <section className="planning-section refined" id="planning">
         <div className="section-heading">
           <p className="eyebrow">Master Plan</p>
-          <h2>SAO PAULO AS A SYSTEM</h2>
+          <h2>SÃO PAULO AS A SYSTEM</h2>
           <p>The Master Plan is the city's growth agreement: it connects where people live, how they move, where nature is protected, and how land should serve public life.</p>
         </div>
         <div className="master-plan-grid">
@@ -374,6 +513,13 @@ export function StoryExperience() {
             <p>Empty or underused land is not neutral. In a fairer city, land should help produce housing, services, nature, and opportunity.</p>
           </article>
         </div>
+        <SectionSources
+          sources={[
+            { label: "Gestão Urbana: Plano Diretor", href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
+            { label: "PDE 2023 revision", href: "https://gestaourbana.prefeitura.sp.gov.br/noticias/entenda-os-ajustes-sancionados-para-o-plano-diretor-na-area-de-mobilidade/" },
+            { label: "Prefeitura legislation page", href: "https://capital.sp.gov.br/web/licenciamento/w/legislacao/288078" }
+          ]}
+        />
       </section>
 
       <section className="process-section refined" id="process">
@@ -394,6 +540,7 @@ export function StoryExperience() {
             </motion.figure>
           ))}
         </div>
+        <SectionSources sources={[{ label: "student sketches, model photos, and classroom documentation" }]} />
       </section>
 
       <section className="ods-section refined" id="ods">
@@ -430,6 +577,12 @@ export function StoryExperience() {
           </article>
         </motion.div>
         <GuidingQuestion topic="SDGs / ODS" />
+        <SectionSources
+          sources={[
+            { label: "UN Sustainable Development Goals", href: "https://sdgs.un.org/goals" },
+            { label: "UN Goal 11", href: "https://sdgs.un.org/goals/goal11" }
+          ]}
+        />
       </section>
 
       <section className="projects-teaser refined" id="projects">
@@ -450,11 +603,12 @@ export function StoryExperience() {
                   {project.systems.map((system) => <span key={system}>{system}</span>)}
                   {project.sdgs.map((sdg) => <span key={sdg}>SDG {sdg}</span>)}
                 </div>
+                <GuidingQuestion topic="Projects" />
               </div>
             </motion.details>
           ))}
         </div>
-        <GuidingQuestion topic="Projects" />
+        <SectionSources sources={[{ label: "student project proposals and model documentation" }, { label: "UN Sustainable Development Goals", href: "https://sdgs.un.org/goals" }]} />
       </section>
     </main>
   );
