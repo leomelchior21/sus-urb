@@ -3086,3 +3086,212 @@ blockquote {
     padding: 0;
   }
 }
+
+/* Requested interaction and spacing polish */
+.glass-nav.labeled-nav {
+  width: min(462px, calc(100vw - 0.8rem));
+  min-height: 58px;
+  padding: 0.42rem;
+  border-radius: 999px;
+}
+
+.nav-links.labeled {
+  display: grid;
+  width: 100%;
+  grid-auto-flow: initial;
+  grid-auto-columns: initial;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.18rem;
+  justify-content: stretch;
+}
+
+.nav-links.labeled .nav-link {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.nav-links.labeled .nav-link.active {
+  background: rgba(216, 240, 163, 0.25);
+}
+
+.hero-section.refined::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 30svh;
+  background: linear-gradient(180deg, rgba(6, 25, 18, 0), rgba(13, 38, 29, 0.7), rgba(28, 53, 40, 0.96));
+  pointer-events: none;
+}
+
+.sao-section.refined {
+  padding-top: clamp(1.4rem, 5vw, 3.2rem);
+  background: linear-gradient(180deg, rgba(28, 53, 40, 0.88), rgba(56, 32, 26, 0.66) 34%, rgba(44, 50, 36, 0.54) 74%, rgba(20, 51, 38, 0.42));
+}
+
+.one-page .section-heading {
+  padding-top: clamp(5rem, 13vw, 8rem);
+  padding-bottom: clamp(2.2rem, 6vw, 3.4rem);
+}
+
+.question-block {
+  margin-top: clamp(1.1rem, 4vw, 2rem);
+}
+
+.section-sources {
+  margin-top: clamp(1.2rem, 4vw, 2rem);
+  margin-bottom: clamp(4.2rem, 9vw, 6.8rem);
+}
+
+.hero-section .section-sources {
+  bottom: 6.8rem;
+}
+
+.solarpunk-mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.62rem;
+  width: min(100% - 1.4rem, 1080px);
+  margin: 1rem auto 5.4rem;
+}
+
+.solar-photo-tile {
+  position: relative;
+  min-height: clamp(145px, 42vw, 230px);
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(216, 240, 163, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.solar-photo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: solarTileFade 640ms ease both;
+}
+
+.solar-photo-tile figcaption {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.55rem;
+  display: inline-flex;
+  max-width: calc(100% - 1.1rem);
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.38rem 0.52rem;
+  border-radius: 999px;
+  color: var(--forest-950);
+  background: rgba(216, 240, 163, 0.92);
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.solar-photo-tile figcaption svg {
+  flex: 0 0 auto;
+}
+
+.project-bento summary {
+  position: relative;
+  padding-right: 3.3rem;
+}
+
+.project-bento summary::before {
+  content: "";
+  position: absolute;
+  inset: 0.45rem;
+  border: 1px solid rgba(216, 240, 163, 0.12);
+  border-radius: 0.95rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.project-bento:not([open]) summary::before {
+  animation: projectInvite 2.4s ease-in-out infinite;
+}
+
+.project-disclosure {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  padding: 0.45rem;
+  border-radius: 999px;
+  color: var(--forest-950);
+  background: var(--lime-soft);
+  box-shadow: 0 0 0 0 rgba(216, 240, 163, 0.4);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.project-bento[open] .project-disclosure {
+  transform: rotate(180deg);
+  box-shadow: 0 0 0 8px rgba(216, 240, 163, 0.08);
+}
+
+.project-bento:not([open]) .project-disclosure {
+  animation: disclosurePulse 2s ease-in-out infinite;
+}
+
+@keyframes solarTileFade {
+  from {
+    opacity: 0.52;
+    transform: scale(1.035);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes projectInvite {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes disclosurePulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@media (min-width: 720px) {
+  .glass-nav.labeled-nav {
+    width: min(540px, calc(100vw - 2rem));
+  }
+
+  .nav-links.labeled {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.24rem;
+  }
+
+  .nav-links.labeled .nav-link {
+    min-height: 46px;
+  }
+
+  .solarpunk-mosaic {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .solar-photo-tile {
+    min-height: 210px;
+  }
+}

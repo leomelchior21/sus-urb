@@ -622,7 +622,7 @@ function GuidingQuestion({ topic, language }: { topic: QuestionTopic; language: 
       <div className="question-toolbar">
         <button className="question-button" type="button" onClick={drawQuestion}>
           <Sparkles size={18} aria-hidden="true" />
-          {language === "en" ? "Ask a guiding question" : "Abrir pergunta-guia"}
+          {language === "en" ? "Ask a guiding question" : "toque e faça uma pergunta!"}
         </button>
       </div>
       {questionIndex !== null ? (
@@ -694,7 +694,8 @@ export function StoryExperience({ language }: { language: Language }) {
   const [activeSolarImage, setActiveSolarImage] = useState(0);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const { scrollYProgress } = useScroll();
-  const background = useTransform(scrollYProgress, [0, 0.16, 0.28, 0.58, 0.78, 1], ["#061912", "#2b0c0d", "#143326", "#174d36", "#174d36", "#123a5a"]);
+  const background = useTransform(scrollYProgress, [0, 0.14, 0.24, 0.38, 0.58, 0.78, 1], ["#061912", "#0d261d", "#1c3528", "#2c3224", "#174d36", "#174d36", "#123a5a"]);
+  const solarTiles = solarpunkImages.map((_, tileIndex) => solarpunkImages[(activeSolarImage + tileIndex) % solarpunkImages.length]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -721,7 +722,7 @@ export function StoryExperience({ language }: { language: Language }) {
         <div className="hero-shade" />
         <motion.div className="hero-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
           <motion.p className="eyebrow" initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12 }}>
-            {language === "en" ? "7th grade · cultural fair · maker" : "7º ano · feira cultural · maker"}
+            {language === "en" ? "7th grade · cultural fair · maker" : "7º ano · mostra cultural · maker"}
           </motion.p>
           <motion.h1
             aria-label={language === "en" ? "Sustainable Urbanization" : "Urbanização Sustentável"}
@@ -849,16 +850,17 @@ export function StoryExperience({ language }: { language: Language }) {
             );
           })}
         </div>
-        <motion.div className="solarpunk-slideshow" {...reveal}>
-          <div className="solarpunk-stage" aria-live="polite">
-            {solarpunkImages.map((image, index) => (
-              <figure key={image.src} className={activeSolarImage === index ? "active" : ""} aria-hidden={activeSolarImage !== index}>
+        <motion.div className="solarpunk-mosaic" {...reveal}>
+          {solarTiles.map((image, index) => (
+            <figure key={`${index}-${image.src}`} className={`solar-photo-tile tile-${index + 1}`}>
                 <Image
+                  key={image.src}
                   src={image.src}
                   alt={`${image.label[language]} ${language === "en" ? "solarpunk visual reference." : "referência visual solarpunk."}`}
-                  width={1100}
-                  height={760}
-                  sizes="(max-width: 760px) 92vw, 980px"
+                  width={620}
+                  height={460}
+                  sizes="(max-width: 760px) 42vw, 210px"
+                  unoptimized={image.src.endsWith(".jfif")}
                 />
                 <figcaption>
                   <SunMedium size={15} aria-hidden="true" />
@@ -866,19 +868,6 @@ export function StoryExperience({ language }: { language: Language }) {
                 </figcaption>
               </figure>
             ))}
-          </div>
-          <div className="solarpunk-dots" aria-label={language === "en" ? "Solarpunk image selector" : "Seletor de imagens solarpunk"}>
-            {solarpunkImages.map((image, index) => (
-              <button
-                key={image.src}
-                type="button"
-                className={activeSolarImage === index ? "active" : ""}
-                aria-label={`${language === "en" ? "Show" : "Mostrar"} ${image.label[language]}`}
-                aria-pressed={activeSolarImage === index}
-                onClick={() => setActiveSolarImage(index)}
-              />
-            ))}
-          </div>
         </motion.div>
         <GuidingQuestion topic="Solarpunk" language={language} />
         <SectionSources
@@ -1093,6 +1082,7 @@ export function StoryExperience({ language }: { language: Language }) {
 
       <section className="projects-teaser refined" id="projects">
         <div className="section-heading">
+          <p className="eyebrow">{language === "en" ? "Student groups" : "Grupos dos estudantes"}</p>
           <h2>{language === "en" ? "OUR SOLARPUNK CITY" : "NOSSA CIDADE SOLARPUNK"}</h2>
         </div>
         <div className="project-bento-grid">
@@ -1109,6 +1099,7 @@ export function StoryExperience({ language }: { language: Language }) {
                 <span>{biomimicryLabels[project.biomimicry][language]}</span>
                 <h3>{copy.name[language]}</h3>
                 <p>{project.students}</p>
+                <ChevronDown className="project-disclosure" size={22} aria-hidden="true" />
               </summary>
               <div className="project-bento-body">
                 <p>{copy.solution[language]}</p>
