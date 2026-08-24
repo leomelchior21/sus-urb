@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ExternalLink, HelpCircle, MapPinned, Route, Sparkles, Sprout, SunMedium, Users, Zap } from "lucide-react";
@@ -518,6 +518,8 @@ const questionBankPt: Record<QuestionTopic, string[]> = {
 const odsOptions = [
   {
     id: "11",
+    color: "#FD9D24",
+    ink: "#111111",
     title: { en: "Sustainable Cities and Communities", pt: "Cidades e Comunidades Sustentáveis" },
     focus: {
       en: "The heart of the exhibition: housing, mobility, public space, resilience, and inclusive urban life.",
@@ -530,6 +532,8 @@ const odsOptions = [
   },
   {
     id: "7",
+    color: "#FCC30B",
+    ink: "#111111",
     title: { en: "Affordable and Clean Energy", pt: "Energia Limpa e Acessível" },
     focus: {
       en: "Connects to solar panels, passive cooling, daylight, and buildings that need less energy to stay comfortable.",
@@ -542,6 +546,8 @@ const odsOptions = [
   },
   {
     id: "13",
+    color: "#3F7E44",
+    ink: "#ffffff",
     title: { en: "Climate Action", pt: "Ação contra a Mudança Global do Clima" },
     focus: {
       en: "Helps students explain heat islands, heavy rain, flood risk, and the need for cities that adapt to climate pressure.",
@@ -554,6 +560,8 @@ const odsOptions = [
   },
   {
     id: "15",
+    color: "#56C02B",
+    ink: "#111111",
     title: { en: "Life on Land", pt: "Vida Terrestre" },
     focus: {
       en: "Makes biodiversity visible through green roofs, living walls, corridors, soil, and habitats inside the city.",
@@ -566,6 +574,8 @@ const odsOptions = [
   },
   {
     id: "6",
+    color: "#26BDE2",
+    ink: "#111111",
     title: { en: "Clean Water and Sanitation", pt: "Água Potável e Saneamento" },
     focus: {
       en: "Links water-sensitive design to drainage, reuse, infiltration, and cleaner urban rivers.",
@@ -694,8 +704,16 @@ export function StoryExperience({ language }: { language: Language }) {
   const [activeSolarImage, setActiveSolarImage] = useState(0);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const { scrollYProgress } = useScroll();
-  const background = useTransform(scrollYProgress, [0, 0.14, 0.24, 0.38, 0.58, 0.78, 1], ["#061912", "#0d261d", "#1c3528", "#2c3224", "#174d36", "#174d36", "#123a5a"]);
+  const background = useTransform(
+    scrollYProgress,
+    [0, 0.1, 0.18, 0.28, 0.42, 0.55, 0.72, 1],
+    ["#061912", "#12281e", "#3b0508", "#5a070d", "#43070a", "#0f2f23", "#174d36", "#123a5a"]
+  );
   const solarTiles = solarpunkImages.map((_, tileIndex) => solarpunkImages[(activeSolarImage + tileIndex) % solarpunkImages.length]);
+  const odsStyle = {
+    "--ods-color": activeOds.color,
+    "--ods-ink": activeOds.ink
+  } as CSSProperties;
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -1033,7 +1051,7 @@ export function StoryExperience({ language }: { language: Language }) {
         <SectionSources language={language} sources={[{ label: { en: "student sketches, model photos, and classroom documentation", pt: "esboços dos estudantes, fotos dos modelos e documentação de sala" } }]} />
       </section>
 
-      <section className="ods-section refined" id="ods">
+      <section className="ods-section refined" id="ods" style={odsStyle}>
         <div className="section-heading">
           <p className="eyebrow">ODS / SDGs</p>
           <h2>{language === "en" ? "GLOBAL GOALS, LOCAL DECISIONS" : "METAS GLOBAIS, DECISÕES LOCAIS"}</h2>

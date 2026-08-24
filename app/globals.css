@@ -3295,3 +3295,94 @@ blockquote {
     min-height: 210px;
   }
 }
+
+/* Dramatic section color pass and dynamic SDG palette */
+.glass-nav.labeled-nav {
+  min-height: 49px;
+  padding: 0.3rem;
+}
+
+.nav-links.labeled .nav-link {
+  min-height: 37px;
+}
+
+.nav-links.labeled .nav-link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.hero-section.refined::before {
+  height: 44svh;
+  background:
+    linear-gradient(180deg, rgba(6, 25, 18, 0), rgba(45, 7, 8, 0.4) 38%, rgba(72, 6, 10, 0.92) 76%, #4d070b);
+}
+
+.sao-section.refined {
+  background:
+    radial-gradient(circle at 82% 6%, rgba(207, 118, 84, 0.2), transparent 32%),
+    linear-gradient(180deg, #4d070b 0%, #340507 54%, #1c1711 100%);
+}
+
+.golden-section.refined {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(216, 240, 163, 0.14), transparent 36%),
+    linear-gradient(180deg, #143326 0%, #0f2f23 68%, rgba(15, 47, 35, 0.72) 100%);
+}
+
+.ods-section.refined {
+  --ods-color: #fd9d24;
+  --ods-ink: #111111;
+  background:
+    radial-gradient(circle at 88% 9%, color-mix(in srgb, var(--ods-color) 38%, transparent), transparent 34%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ods-color) 28%, #071d16), rgba(7, 29, 22, 0.86) 72%);
+  transition: background 320ms ease;
+}
+
+.ods-section.refined .section-heading .eyebrow,
+.ods-section.refined .section-sources span:first-child,
+.ods-section.refined .section-sources a {
+  color: color-mix(in srgb, var(--ods-color) 78%, #ffffff);
+}
+
+.ods-explorer label {
+  color: color-mix(in srgb, var(--ods-color) 86%, #ffffff);
+}
+
+.select-shell select {
+  border-color: color-mix(in srgb, var(--ods-color) 62%, rgba(255, 255, 255, 0.18));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ods-color) 18%, transparent);
+}
+
+.select-shell svg {
+  color: var(--ods-color);
+}
+
+.ods-explorer article {
+  border-color: color-mix(in srgb, var(--ods-color) 54%, rgba(255, 255, 255, 0.14));
+  background:
+    radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--ods-color) 42%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--ods-color) 30%, rgba(255, 255, 255, 0.1)), rgba(255, 255, 255, 0.055));
+  box-shadow: 0 22px 70px color-mix(in srgb, var(--ods-color) 22%, rgba(0, 0, 0, 0.24));
+  transition: border-color 260ms ease, background 320ms ease, box-shadow 320ms ease;
+}
+
+.ods-explorer article > span {
+  color: var(--ods-color);
+  text-shadow: 0 10px 38px color-mix(in srgb, var(--ods-color) 34%, transparent);
+}
+
+.ods-explorer article b {
+  color: var(--ods-ink);
+  background: var(--ods-color);
+}
+
+@media (min-width: 720px) {
+  .glass-nav.labeled-nav {
+    min-height: 49px;
+    max-height: 49px;
+  }
+
+  .nav-links.labeled .nav-link {
+    min-height: 37px;
+  }
+}
