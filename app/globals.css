@@ -2490,6 +2490,344 @@ blockquote {
   padding-bottom: 6.8rem;
 }
 
+/* Source notes should never fight the exhibition content */
+.section-sources {
+  margin: 1rem auto 4.8rem;
+  padding-inline: 0.2rem;
+}
+
+.hero-section .section-sources {
+  bottom: 4.9rem;
+  left: 1rem;
+  right: auto;
+  max-width: min(460px, calc(100vw - 2rem));
+}
+
+.golden-section .section-sources {
+  margin-top: 1rem;
+}
+
+.solarpunk-section .section-sources,
+.bio-section .section-sources,
+.planning-section .section-sources,
+.process-section .section-sources,
+.ods-section .section-sources {
+  margin-top: 1.15rem;
+}
+
+/* Solarpunk trio redesign */
+.solar-trio {
+  position: relative;
+  width: min(100% - 1.4rem, 1060px);
+  min-height: 560px;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(216, 240, 163, 0.18);
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(216, 240, 163, 0.18), transparent 26%),
+    radial-gradient(circle at 20% 82%, rgba(103, 190, 193, 0.14), transparent 28%),
+    radial-gradient(circle at 78% 82%, rgba(243, 201, 83, 0.13), transparent 30%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.solar-trio-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.solar-trio-lines path {
+  fill: none;
+  stroke: rgba(216, 240, 163, 0.62);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 20 20;
+  filter: drop-shadow(0 0 12px rgba(216, 240, 163, 0.24));
+  animation: dash 14s linear infinite;
+}
+
+.solar-trio-lines path:nth-child(2) {
+  stroke: rgba(103, 190, 193, 0.68);
+  animation-duration: 10s;
+}
+
+.solar-trio-lines path:nth-child(3) {
+  stroke: rgba(243, 201, 83, 0.74);
+  animation-duration: 11s;
+}
+
+.solar-trio-lines path:nth-child(4) {
+  stroke: rgba(175, 196, 138, 0.64);
+  animation-duration: 13s;
+}
+
+.solar-trio-core {
+  position: absolute;
+  z-index: 3;
+  top: 49%;
+  left: 50%;
+  display: grid;
+  width: min(38vw, 178px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 1rem;
+  translate: -50% -50%;
+  border: 2px solid rgba(255, 240, 110, 0.5);
+  border-radius: 999px;
+  color: #08170f;
+  background:
+    radial-gradient(circle at 50% 35%, #fff6a5, var(--solar) 62%, #b68d24);
+  box-shadow: 0 0 46px rgba(243, 201, 83, 0.38), 0 20px 80px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.solar-trio-core svg {
+  width: 26px;
+  height: 26px;
+}
+
+.solar-trio-core span {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.15rem, 5vw, 2.1rem);
+  font-weight: 950;
+  line-height: 0.9;
+}
+
+.solar-trio-core b {
+  font-size: 0.68rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.solar-node {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  gap: 0.4rem;
+  width: min(42vw, 220px);
+  min-height: 138px;
+  padding: 0.9rem;
+  border: 1px solid rgba(216, 240, 163, 0.22);
+  border-radius: 1.05rem;
+  background: rgba(7, 29, 22, 0.72);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(16px);
+}
+
+.solar-node::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0.42;
+  background: radial-gradient(circle at 30% 10%, rgba(216, 240, 163, 0.34), transparent 48%);
+  animation: nodeGlow 3.6s ease-in-out infinite;
+}
+
+.solar-node.human {
+  top: 1rem;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.solar-node.nature {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.solar-node.energy {
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.solar-node svg {
+  color: var(--lime-soft);
+}
+
+.solar-node h3 {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.65rem, 7vw, 3rem);
+  line-height: 0.94;
+}
+
+.solar-node p {
+  margin: 0;
+  color: rgba(250, 250, 244, 0.74);
+  font-size: clamp(0.78rem, 2.8vw, 1rem);
+  line-height: 1.35;
+}
+
+/* 4E scroll interaction */
+.four-es-section {
+  color: var(--paper);
+  background: transparent;
+}
+
+.four-es-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: min(100% - 1.4rem, 1080px);
+  min-height: 640px;
+  margin: 0 auto;
+  padding: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(103, 190, 193, 0.22);
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(103, 190, 193, 0.22), transparent 28%),
+    linear-gradient(135deg, rgba(7, 29, 22, 0.36), rgba(18, 77, 113, 0.22));
+}
+
+.four-es-line {
+  position: absolute;
+  z-index: 2;
+  background: linear-gradient(90deg, transparent, rgba(103, 190, 193, 0.95), transparent);
+  box-shadow: 0 0 28px rgba(103, 190, 193, 0.4);
+  transform-origin: center;
+}
+
+.four-es-line.horizontal {
+  top: 50%;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 3px;
+}
+
+.four-es-line.vertical {
+  top: 0.75rem;
+  bottom: 0.75rem;
+  left: 50%;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, rgba(103, 190, 193, 0.95), transparent);
+}
+
+.four-es-hub {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: min(34vw, 172px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 1rem;
+  translate: -50% -50%;
+  border: 2px solid rgba(103, 190, 193, 0.68);
+  border-radius: 999px;
+  color: #eafcff;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(103, 190, 193, 0.7), rgba(18, 58, 90, 0.95) 70%);
+  box-shadow: 0 0 48px rgba(103, 190, 193, 0.45);
+  text-align: center;
+}
+
+.four-es-hub strong {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.55rem, 8vw, 3.2rem);
+  line-height: 0.85;
+}
+
+.four-es-hub span {
+  max-width: 110px;
+  font-size: 0.62rem;
+  font-weight: 950;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.four-e-card {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  min-height: 265px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.95rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1.05rem;
+  background:
+    linear-gradient(180deg, rgba(7, 29, 22, 0.18), rgba(7, 29, 22, 0.58)),
+    rgba(255, 255, 255, 0.07);
+}
+
+.four-e-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.18;
+  background: linear-gradient(135deg, var(--lime-soft), transparent 48%, var(--cyan));
+}
+
+.four-e-card svg {
+  color: var(--lime-soft);
+}
+
+.four-e-card h3 {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.5rem, 6vw, 3rem);
+  line-height: 0.95;
+}
+
+.four-e-card span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--lime-soft);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.four-e-card p {
+  margin: 0.8rem 0 0;
+  color: rgba(250, 250, 244, 0.74);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+@keyframes nodeGlow {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@media (max-width: 520px) {
+  .solar-trio {
+    min-height: 500px;
+  }
+
+  .solar-trio-core {
+    width: 142px;
+  }
+
+  .solar-node {
+    width: min(43vw, 172px);
+    min-height: 122px;
+    padding: 0.78rem;
+  }
+
+  .solar-node h3 {
+    font-size: clamp(1.35rem, 6vw, 2rem);
+  }
+
+  .solar-node p {
+    font-size: 0.76rem;
+  }
+}
+
 @keyframes questionPulse {
   0%,
   100% {

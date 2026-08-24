@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ExternalLink, HelpCircle, MapPinned, Route, Sparkles, Sprout, SunMedium, Users, Zap } from "lucide-react";
@@ -57,6 +57,54 @@ const solarpunkImages = [
   { src: newImage("solarpunk-terrace.jpg"), label: "Terraces" },
   { src: newImage("solarpunk-sketch.jpg"), label: "Concept" },
   { src: newImage("solarpunk-city.jpg"), label: "City" }
+];
+
+const solarpunkPillars = [
+  {
+    name: "Human",
+    icon: Users,
+    copy: "inclusive spaces, comfort, access, community",
+    position: "human"
+  },
+  {
+    name: "Nature",
+    icon: Sprout,
+    copy: "shade, water, biodiversity, living surfaces",
+    position: "nature"
+  },
+  {
+    name: "Energy",
+    icon: Zap,
+    copy: "solar power, passive cooling, efficient systems",
+    position: "energy"
+  }
+];
+
+const fourEs = [
+  {
+    name: "Environment",
+    line: "helps the planet",
+    icon: Sprout,
+    copy: "Green areas, water absorption, shade, biodiversity, and cleaner air make the city healthier."
+  },
+  {
+    name: "Equity",
+    line: "helps everyone",
+    icon: Users,
+    copy: "A sustainable city must include housing, access, safety, comfort, and public life for different people."
+  },
+  {
+    name: "Efficiency",
+    line: "works better, not bigger",
+    icon: Zap,
+    copy: "Shorter trips, passive comfort, clean energy, and smart infrastructure reduce waste and pressure."
+  },
+  {
+    name: "Economy",
+    line: "lasts over time",
+    icon: Route,
+    copy: "Local services, durable systems, maintenance, and shared resources help the city keep working."
+  }
 ];
 
 type QuestionTopic = "Sustainable Urbanization" | "Solarpunk" | "Biomimicry" | "SDGs / ODS" | "Projects";
@@ -308,6 +356,53 @@ function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
   );
 }
 
+function FourEsSection() {
+  const ref = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 78%", "end 35%"] });
+  const lineProgress = useTransform(scrollYProgress, [0.05, 0.72], [0.08, 1]);
+  const hubScale = useTransform(scrollYProgress, [0, 0.35, 1], [0.88, 1.08, 1]);
+  const hubRotate = useTransform(scrollYProgress, [0, 1], [-8, 8]);
+
+  return (
+    <section className="four-es-section refined" id="four-es" ref={ref}>
+      <div className="section-heading dark">
+        <p className="eyebrow">Sustainable urbanization</p>
+        <h2>THE 4E&apos;S</h2>
+        <p>These four ideas set the tone for the city: sustainability has to protect the environment, include people, work efficiently, and last economically.</p>
+      </div>
+      <div className="four-es-board">
+        <motion.div className="four-es-line horizontal" style={{ scaleX: lineProgress }} aria-hidden="true" />
+        <motion.div className="four-es-line vertical" style={{ scaleY: lineProgress }} aria-hidden="true" />
+        <motion.div className="four-es-hub" style={{ scale: hubScale, rotate: hubRotate }}>
+          <strong>4E&apos;s</strong>
+          <span>in sustainable urbanization</span>
+        </motion.div>
+        {fourEs.map((pillar, index) => {
+          const Icon = pillar.icon;
+          return (
+            <motion.article
+              key={pillar.name}
+              className={`four-e-card card-${index + 1}`}
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: "easeOut" }}
+            >
+              <Icon aria-hidden="true" />
+              <div>
+                <h3>{pillar.name}</h3>
+                <span>{pillar.line}</span>
+                <p>{pillar.copy}</p>
+              </div>
+            </motion.article>
+          );
+        })}
+      </div>
+      <SectionSources sources={[{ label: "classroom 4E framework for sustainable urbanization" }]} />
+    </section>
+  );
+}
+
 export function StoryExperience() {
   const [activeOds, setActiveOds] = useState(odsOptions[0]);
   const { scrollYProgress } = useScroll();
@@ -399,27 +494,41 @@ export function StoryExperience() {
           <h2>SOLARPUNK</h2>
           <p>Solarpunk is an optimistic design lens. It asks how people, ecosystems, and clean energy can support each other in everyday urban life.</p>
         </div>
-        <div className="pillar-stage" aria-label="Human, nature, and energy pillars animation">
-          <motion.div className="pillar human" whileInView={{ y: [18, -8, 18] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-            <Users aria-hidden="true" />
-            <span>Human</span>
-            <p>inclusive spaces, comfort, access, community</p>
-          </motion.div>
-          <motion.div className="pillar nature" whileInView={{ y: [-10, 16, -10] }} transition={{ duration: 5.6, repeat: Infinity, ease: "easeInOut" }}>
-            <Sprout aria-hidden="true" />
-            <span>Nature</span>
-            <p>shade, water, biodiversity, living surfaces</p>
-          </motion.div>
-          <motion.div className="pillar energy" whileInView={{ y: [12, -14, 12] }} transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}>
-            <Zap aria-hidden="true" />
-            <span>Energy</span>
-            <p>solar power, passive cooling, efficient systems</p>
-          </motion.div>
-          <svg viewBox="0 0 900 520" className="pillar-lines" aria-hidden="true">
-            <path d="M180 305 C310 150 590 150 720 305" />
-            <path d="M205 325 C370 415 520 415 695 325" />
-            <path d="M450 120 C390 245 395 335 450 438 C505 335 510 245 450 120" />
+        <div className="solar-trio" aria-label="Human, nature, and energy system animation">
+          <svg viewBox="0 0 900 580" className="solar-trio-lines" aria-hidden="true">
+            <path d="M450 112 L190 438 L710 438 Z" />
+            <path d="M450 112 C390 250 350 330 190 438" />
+            <path d="M450 112 C510 250 550 330 710 438" />
+            <path d="M190 438 C330 510 570 510 710 438" />
           </svg>
+          <motion.div
+            className="solar-trio-core"
+            initial={{ opacity: 0, scale: 0.7 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <SunMedium aria-hidden="true" />
+            <span>Solarpunk</span>
+            <b>city system</b>
+          </motion.div>
+          {solarpunkPillars.map((pillar, index) => {
+            const Icon = pillar.icon;
+            return (
+              <motion.article
+                key={pillar.name}
+                className={`solar-node ${pillar.position}`}
+                initial={{ opacity: 0, scale: 0.78 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.45 }}
+                transition={{ duration: 0.55, delay: index * 0.12, ease: "easeOut" }}
+              >
+                <Icon aria-hidden="true" />
+                <h3>{pillar.name}</h3>
+                <p>{pillar.copy}</p>
+              </motion.article>
+            );
+          })}
         </div>
         <div className="solarpunk-gallery">
           {solarpunkImages.map((image) => (
@@ -438,6 +547,8 @@ export function StoryExperience() {
           ]}
         />
       </section>
+
+      <FourEsSection />
 
       <section className="bio-section refined" id="biomimicry">
         <div className="section-heading">

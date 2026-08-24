@@ -11,7 +11,8 @@ This is a mobile-first, one-page cultural fair website for the 7th grade Sustain
 - Hero: exhibition title and solarpunk reference image.
 - São Paulo: the real city context that motivates the project.
 - Golden Circle: why, how, and what framework for the exhibition.
-- Solarpunk: animated human, nature, and energy pillars.
+- Solarpunk: animated human, nature, and energy system triangle.
+- 4E's: scroll-reactive framework for Environment, Equity, Efficiency, and Economy.
 - Biomimicry: nature-inspired strategy cards and CTA to the biomimicry deep dive.
 - Master Plan: key São Paulo planning ideas rewritten for clarity.
 - Maker Process: sideways-scrolling sketches and model photos.
@@ -25,6 +26,8 @@ This is a mobile-first, one-page cultural fair website for the 7th grade Sustain
 - Guiding questions support English and PT-BR because some parents may not speak English.
 - Project guiding questions live inside the expanded project card so the prompt stays connected to the selected idea.
 - Source notes are intentionally tiny and placed near the end of each section.
+- Source notes should sit after content with positive spacing; avoid negative margins because they can overlap headings or animations.
+- The 4E framework is a classroom simplification to clarify sustainable urbanization for parents and students.
 
 ## Main Sources Used
 
@@ -46,4 +49,3 @@ Recommended check before pushing:
 ```bash
 npm run build
 ```
-
