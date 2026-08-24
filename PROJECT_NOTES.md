@@ -22,6 +22,8 @@ This is a mobile-first, one-page cultural fair website for the 7th grade Sustain
 ## Interaction Decisions
 
 - Bottom navigation stays compact and visible on mobile and desktop.
+- Bottom navigation is a scroll-spy: the active item follows the section currently entering the viewport.
+- Main nav topics: Home, São Paulo, Solarpunk, Master Plan, Biomimicry, ODS, and City.
 - Guiding questions appear by tapping a high-contrast animated button.
 - Guiding questions support English and PT-BR because some parents may not speak English.
 - Project guiding questions live inside the expanded project card so the prompt stays connected to the selected idea.
