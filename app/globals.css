@@ -2937,3 +2937,152 @@ blockquote {
     grid-template-columns: 1fr;
   }
 }
+
+/* Language toggle, icon-only nav, and timed solarpunk slideshow */
+.glass-nav.labeled-nav {
+  display: block;
+  border-radius: 999px;
+}
+
+.language-toggle {
+  position: fixed;
+  z-index: 70;
+  top: max(0.7rem, env(safe-area-inset-top));
+  right: max(0.7rem, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: repeat(2, 34px);
+  gap: 0.16rem;
+  padding: 0.16rem;
+  border-radius: 999px;
+  background: rgba(7, 29, 22, 0.38);
+}
+
+.language-toggle button {
+  display: grid;
+  min-width: 0;
+  min-height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: rgba(250, 250, 244, 0.74);
+  background: transparent;
+  font-size: 0.66rem;
+  font-weight: 950;
+}
+
+.language-toggle button.active {
+  color: var(--forest-950);
+  background: var(--lime-soft);
+}
+
+.nav-links.labeled {
+  grid-auto-columns: 44px;
+  gap: 0.16rem;
+  justify-content: end;
+}
+
+.nav-links.labeled .nav-link {
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.nav-links.labeled .nav-link span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.solarpunk-slideshow {
+  width: min(100% - 1.4rem, 980px);
+  margin: 1rem auto 5rem;
+}
+
+.solarpunk-stage {
+  position: relative;
+  min-height: clamp(320px, 62vw, 620px);
+  overflow: hidden;
+  border: 1px solid rgba(216, 240, 163, 0.18);
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.solarpunk-stage figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 520ms ease, transform 720ms ease;
+}
+
+.solarpunk-stage figure.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.solarpunk-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solarpunk-stage figcaption {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 999px;
+  color: var(--forest-950);
+  background: var(--lime-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.solarpunk-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.38rem;
+  padding-top: 0.8rem;
+}
+
+.solarpunk-dots button {
+  width: 12px;
+  height: 12px;
+  min-height: 12px;
+  padding: 0;
+  border: 1px solid rgba(216, 240, 163, 0.64);
+  border-radius: 999px;
+  background: rgba(216, 240, 163, 0.16);
+}
+
+.solarpunk-dots button.active {
+  width: 32px;
+  background: var(--lime-soft);
+}
+
+@media (min-width: 720px) {
+  .glass-nav.labeled-nav {
+    width: min(780px, calc(100vw - 2rem));
+  }
+
+  .nav-links.labeled {
+    grid-auto-columns: 48px;
+    grid-template-columns: repeat(7, 48px);
+    gap: 0.25rem;
+    justify-content: end;
+  }
+
+  .nav-links.labeled .nav-link {
+    flex-direction: row;
+    width: 48px;
+    min-height: 46px;
+    padding: 0;
+  }
+}

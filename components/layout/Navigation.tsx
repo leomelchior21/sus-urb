@@ -3,18 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Building2, CircleDot, Home, Landmark, Leaf, MapPinned, SunMedium } from "lucide-react";
+import type { Language } from "@/app/page";
 
 const links = [
-  { id: "home", href: "/#home", label: "Home", icon: Home },
-  { id: "sao-paulo", href: "/#sao-paulo", label: "São Paulo", icon: MapPinned },
-  { id: "solarpunk", href: "/#solarpunk", label: "Solar", icon: SunMedium },
-  { id: "biomimicry", href: "/#biomimicry", label: "Bio", icon: Leaf },
-  { id: "planning", href: "/#planning", label: "Master Plan", icon: Landmark },
-  { id: "ods", href: "/#ods", label: "ODS", icon: CircleDot },
-  { id: "projects", href: "/#projects", label: "City", icon: Building2 }
+  { id: "home", href: "/#home", label: { en: "Home", pt: "Início" }, icon: Home },
+  { id: "sao-paulo", href: "/#sao-paulo", label: { en: "São Paulo", pt: "São Paulo" }, icon: MapPinned },
+  { id: "solarpunk", href: "/#solarpunk", label: { en: "Solarpunk", pt: "Solarpunk" }, icon: SunMedium },
+  { id: "biomimicry", href: "/#biomimicry", label: { en: "Biomimicry", pt: "Biomimética" }, icon: Leaf },
+  { id: "planning", href: "/#planning", label: { en: "Master Plan", pt: "Plano Diretor" }, icon: Landmark },
+  { id: "ods", href: "/#ods", label: { en: "SDGs", pt: "ODS" }, icon: CircleDot },
+  { id: "projects", href: "/#projects", label: { en: "City projects", pt: "Projetos da cidade" }, icon: Building2 }
 ];
 
-export function Navigation() {
+interface NavigationProps {
+  language: Language;
+  onLanguageChange: (language: Language) => void;
+}
+
+export function Navigation({ language, onLanguageChange }: NavigationProps) {
   const [activeId, setActiveId] = useState(links[0].id);
   const navRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,22 +80,37 @@ export function Navigation() {
   }, [activeId]);
 
   return (
-    <nav className="glass-nav labeled-nav" aria-label="Main navigation">
+    <>
+      <div className="language-toggle" aria-label={language === "en" ? "Website language" : "Idioma do site"}>
+        {(["en", "pt"] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            className={language === option ? "active" : ""}
+            aria-pressed={language === option}
+            onClick={() => onLanguageChange(option)}
+          >
+            {option === "en" ? "EN" : "PT"}
+          </button>
+        ))}
+      </div>
+      <nav className="glass-nav labeled-nav" aria-label="Main navigation">
       <div className="nav-links labeled" ref={navRef}>
         {links.map(({ id, href, label, icon: Icon }) => (
           <Link
             className={`nav-link ${activeId === id ? "active" : ""}`}
             href={href}
-            aria-label={label}
+            aria-label={label[language]}
             aria-current={activeId === id ? "page" : undefined}
             data-section={id}
             key={href}
           >
             <Icon size={18} aria-hidden="true" />
-            <span>{label}</span>
+            <span>{label[language]}</span>
           </Link>
         ))}
       </div>
-    </nav>
+      </nav>
+    </>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ExternalLink, HelpCircle, MapPinned, Route, Sparkles, Sprout, SunMedium, Users, Zap } from "lucide-react";
 import { biomimicryStories } from "@/data/biomimicry";
 import { cityProjects } from "@/data/projects";
+import type { Language } from "@/app/page";
 
 const reveal = {
   initial: { opacity: 0, y: 26 },
@@ -16,21 +17,42 @@ const reveal = {
 
 const newImage = (name: string) => `/images/new/${name}`;
 
+type Localized = Record<Language, string>;
+type QuestionTopic = "Sustainable Urbanization" | "Solarpunk" | "Biomimicry" | "SDGs / ODS" | "Projects";
+type SourceLink = { label: Localized; href?: string };
+
 const saoImages = [
   {
     src: newImage("sao-paulo-aerial.jpg"),
-    label: "Density",
-    copy: "A city built upward, under pressure, full of possibility."
+    label: { en: "Density", pt: "Densidade" },
+    copy: {
+      en: "A city built upward, under pressure, and full of possibility.",
+      pt: "Uma cidade que cresceu para cima, sob pressão e cheia de possibilidades."
+    }
   },
   {
     src: newImage("sao-paulo-flood.jpg"),
-    label: "Water",
-    copy: "When rivers and rain meet too much concrete, infrastructure becomes visible."
+    label: { en: "Water", pt: "Água" },
+    copy: {
+      en: "When rivers and heavy rain meet too much concrete, infrastructure becomes visible.",
+      pt: "Quando rios e chuvas fortes encontram concreto demais, a infraestrutura fica visível."
+    }
   },
   {
     src: newImage("sao-paulo-traffic.jpg"),
-    label: "Mobility",
-    copy: "Every commute is also a design consequence."
+    label: { en: "Mobility", pt: "Mobilidade" },
+    copy: {
+      en: "Every commute is also a design consequence.",
+      pt: "Todo deslocamento também é consequência de decisões de projeto."
+    }
+  },
+  {
+    src: newImage("sao-paulo-heat-islands.webp"),
+    label: { en: "Heat Islands", pt: "Ilhas de Calor" },
+    copy: {
+      en: "Heat concentrates where shade, vegetation, and permeable ground disappear.",
+      pt: "O calor se concentra onde sombra, vegetação e solo permeável desaparecem."
+    }
   }
 ];
 
@@ -40,6 +62,233 @@ const bioImages: Record<string, string> = {
   Mangrove: newImage("bio-mangrove.png"),
   Termite: newImage("bio-termite.png"),
   Cactus: newImage("bio-cactus.png")
+};
+
+const biomimicryCopy: Record<string, { title: Localized; principle: Localized }> = {
+  Honeycomb: {
+    title: { en: "Honeycomb-Inspired Spaces", pt: "Espaços Inspirados em Colmeias" },
+    principle: {
+      en: "Repeating cells create strong, efficient, modular structures.",
+      pt: "Células repetidas criam estruturas fortes, eficientes e modulares."
+    }
+  },
+  Moss: {
+    title: { en: "Moss-Inspired Green Walls", pt: "Paredes Verdes Inspiradas em Musgo" },
+    principle: {
+      en: "Moss occupies vertical surfaces, retains moisture, and supports tiny ecosystems.",
+      pt: "O musgo ocupa superfícies verticais, retém umidade e sustenta pequenos ecossistemas."
+    }
+  },
+  Mangrove: {
+    title: { en: "Mangrove-Inspired Supports", pt: "Apoios Inspirados em Manguezais" },
+    principle: {
+      en: "Branching roots create stability in wet and unstable environments.",
+      pt: "Raízes ramificadas criam estabilidade em ambientes úmidos e instáveis."
+    }
+  },
+  Termite: {
+    title: { en: "Termite-Inspired Airflow", pt: "Fluxo de Ar Inspirado em Cupinzeiros" },
+    principle: {
+      en: "Interconnected channels regulate temperature through passive air movement.",
+      pt: "Canais interligados regulam a temperatura por meio do movimento passivo do ar."
+    }
+  },
+  Cactus: {
+    title: { en: "Cactus-Inspired Shading", pt: "Sombreamento Inspirado em Cactos" },
+    principle: {
+      en: "Specialized forms manage intense sunlight, heat, and scarce water.",
+      pt: "Formas especializadas lidam com sol intenso, calor e escassez de água."
+    }
+  }
+};
+
+const systemLabels: Record<string, Localized> = {
+  Water: { en: "Water", pt: "Água" },
+  Energy: { en: "Energy", pt: "Energia" },
+  Greenery: { en: "Greenery", pt: "Vegetação" },
+  Mobility: { en: "Mobility", pt: "Mobilidade" },
+  Waste: { en: "Waste", pt: "Resíduos" },
+  "Public Space": { en: "Public Space", pt: "Espaço Público" },
+  Climate: { en: "Climate", pt: "Clima" }
+};
+
+const biomimicryLabels: Record<string, Localized> = {
+  Honeycomb: { en: "Honeycomb", pt: "Colmeia" },
+  Moss: { en: "Moss", pt: "Musgo" },
+  Mangrove: { en: "Mangrove", pt: "Manguezal" },
+  Termite: { en: "Termite", pt: "Cupinzeiro" },
+  Cactus: { en: "Cactus", pt: "Cacto" }
+};
+
+const projectCopy: Record<string, { name: Localized; solution: Localized }> = {
+  "7A-01": {
+    name: { en: "Termite Apartment Commons", pt: "Apartamentos Comunitários Cupinzeiro" },
+    solution: {
+      en: "A shared apartment building close to shops, schools, and public transportation, with air tunnels inspired by termite mounds.",
+      pt: "Um edifício residencial compartilhado, perto de comércio, escolas e transporte público, com túneis de ar inspirados em cupinzeiros."
+    }
+  },
+  "7A-02": {
+    name: { en: "Moss Courtyard Homes", pt: "Casas com Pátio de Musgo" },
+    solution: {
+      en: "Homes arranged around a shared courtyard where moss-inspired walls cool the space and invite community life.",
+      pt: "Casas organizadas em torno de um pátio comum, onde paredes inspiradas em musgo resfriam o espaço e estimulam a convivência."
+    }
+  },
+  "7A-03": {
+    name: { en: "Honeycomb Modular Housing", pt: "Moradia Modular Colmeia" },
+    solution: {
+      en: "Apartment modules combine in different ways using honeycomb geometry for strength and spatial efficiency.",
+      pt: "Módulos de apartamentos se combinam de diferentes formas usando a geometria da colmeia para ganhar resistência e eficiência espacial."
+    }
+  },
+  "7A-04": {
+    name: { en: "Cactus Cool Homes", pt: "Casas Frescas Cacto" },
+    solution: {
+      en: "Cactus-inspired walls, shades, and smaller openings reduce heat gain while keeping homes livable.",
+      pt: "Paredes, sombras e aberturas menores inspiradas em cactos reduzem o ganho de calor e mantêm as casas habitáveis."
+    }
+  },
+  "7A-05": {
+    name: { en: "Termite Office Tower", pt: "Torre de Escritórios Cupinzeiro" },
+    solution: {
+      en: "An office building with termite-inspired air tunnels that move fresh air through the structure.",
+      pt: "Um edifício de escritórios com túneis de ar inspirados em cupinzeiros, conduzindo ar fresco pela estrutura."
+    }
+  },
+  "7A-06": {
+    name: { en: "Cactus Local Market", pt: "Mercado Local Cacto" },
+    solution: {
+      en: "A local market with cactus-inspired roofs that protect visitors and sellers from intense sunlight.",
+      pt: "Um mercado local com coberturas inspiradas em cactos que protegem visitantes e vendedores do sol intenso."
+    }
+  },
+  "7A-07": {
+    name: { en: "Honeycomb Repair Lab", pt: "Laboratório de Reparos Colmeia" },
+    solution: {
+      en: "A repair center with honeycomb-inspired rooms that adapt to bikes, furniture, electronics, and objects.",
+      pt: "Um centro de reparos com salas inspiradas em colmeias, adaptáveis a bicicletas, móveis, eletrônicos e outros objetos."
+    }
+  },
+  "7A-08": {
+    name: { en: "Moss Food Hall", pt: "Praça Gastronômica Musgo" },
+    solution: {
+      en: "Restaurants, food stands, and meeting areas wrapped in moss-inspired green walls.",
+      pt: "Restaurantes, barracas de comida e áreas de encontro envolvidos por paredes verdes inspiradas em musgo."
+    }
+  },
+  "7B-01": {
+    name: { en: "Mangrove Flood Homes", pt: "Casas Antienchente Manguezal" },
+    solution: {
+      en: "Raised homes on mangrove-inspired supports that let water flow underneath instead of damaging families' homes.",
+      pt: "Casas elevadas sobre apoios inspirados em manguezais, permitindo que a água passe por baixo sem danificar as moradias."
+    }
+  },
+  "7B-02": {
+    name: { en: "Termite Garden Community", pt: "Comunidade Jardim Cupinzeiro" },
+    solution: {
+      en: "A housing cluster with gardens, paths, common areas, and termite-inspired airflow systems.",
+      pt: "Um conjunto habitacional com jardins, caminhos, áreas comuns e sistemas de ventilação inspirados em cupinzeiros."
+    }
+  },
+  "7B-03": {
+    name: { en: "Honeycomb Micro Apartments", pt: "Microapartamentos Colmeia" },
+    solution: {
+      en: "Small apartments formed from honeycomb modules that can be added, moved, or changed.",
+      pt: "Pequenos apartamentos formados por módulos de colmeia que podem ser adicionados, movidos ou transformados."
+    }
+  },
+  "7B-04": {
+    name: { en: "Moss Terrace Residence", pt: "Residência Terraço Musgo" },
+    solution: {
+      en: "A residential building with planted terraces and moss-inspired walls to reduce heat.",
+      pt: "Um edifício residencial com terraços plantados e paredes inspiradas em musgo para reduzir o calor."
+    }
+  },
+  "7B-05": {
+    name: { en: "Termite Maker Workshop", pt: "Oficina Maker Cupinzeiro" },
+    solution: {
+      en: "A workshop for testing, building, and inventing with ventilation inspired by termite mounds.",
+      pt: "Uma oficina para testar, construir e inventar, com ventilação inspirada em cupinzeiros."
+    }
+  },
+  "7B-06": {
+    name: { en: "Cactus Creative Studios", pt: "Estúdios Criativos Cacto" },
+    solution: {
+      en: "Studios for artists and designers with cactus-inspired shades that filter harsh sunlight.",
+      pt: "Estúdios para artistas e designers com sombreamentos inspirados em cactos que filtram a luz solar intensa."
+    }
+  },
+  "7B-07": {
+    name: { en: "Honeycomb Innovation Hub", pt: "Hub de Inovação Colmeia" },
+    solution: {
+      en: "A collaborative technology hub using honeycomb modules for strength and future expansion.",
+      pt: "Um hub colaborativo de tecnologia que usa módulos de colmeia para ganhar resistência e permitir expansão futura."
+    }
+  },
+  "7B-08": {
+    name: { en: "Mangrove Shopping Center", pt: "Centro Comercial Manguezal" },
+    solution: {
+      en: "A shopping center lifted on mangrove-inspired supports so rainwater can pass safely below.",
+      pt: "Um centro comercial elevado sobre apoios inspirados em manguezais, para que a água da chuva passe com segurança por baixo."
+    }
+  },
+  "7C-01": {
+    name: { en: "Cactus Family Housing", pt: "Moradia Familiar Cacto" },
+    solution: {
+      en: "Family homes with cactus-inspired shading for paths, indoor areas, and outdoor gathering.",
+      pt: "Casas familiares com sombreamento inspirado em cactos para caminhos, áreas internas e encontros ao ar livre."
+    }
+  },
+  "7C-02": {
+    name: { en: "Mangrove Rain Apartments", pt: "Apartamentos de Chuva Manguezal" },
+    solution: {
+      en: "Apartments near rain gardens that collect water and use mangrove-inspired landscapes for flood protection.",
+      pt: "Apartamentos próximos a jardins de chuva que coletam água e usam paisagens inspiradas em manguezais para proteção contra enchentes."
+    }
+  },
+  "7C-03": {
+    name: { en: "Honeycomb Adaptive Homes", pt: "Casas Adaptáveis Colmeia" },
+    solution: {
+      en: "Homes built from honeycomb-inspired modules that can add rooms or transform layouts over time.",
+      pt: "Casas feitas com módulos inspirados em colmeias, capazes de ganhar novos cômodos ou mudar de configuração com o tempo."
+    }
+  },
+  "7C-04": {
+    name: { en: "Passive Airflow Apartments", pt: "Apartamentos de Ventilação Passiva" },
+    solution: {
+      en: "A residential building where cool air enters low and hot air exits at the top.",
+      pt: "Um edifício residencial onde o ar fresco entra pela parte baixa e o ar quente sai pela parte superior."
+    }
+  },
+  "7C-05": {
+    name: { en: "Moss Shared Office", pt: "Escritório Compartilhado Musgo" },
+    solution: {
+      en: "A co-working office with moss-inspired green walls and shaded outdoor areas.",
+      pt: "Um escritório compartilhado com paredes verdes inspiradas em musgo e áreas externas sombreadas."
+    }
+  },
+  "7C-06": {
+    name: { en: "Cactus Vertical Farm", pt: "Fazenda Vertical Cacto" },
+    solution: {
+      en: "A multi-level food-growing building with cactus-inspired water-saving and shading systems.",
+      pt: "Um edifício de cultivo de alimentos em vários níveis, com sistemas de economia de água e sombreamento inspirados em cactos."
+    }
+  },
+  "7C-07": {
+    name: { en: "Honeycomb Materials Workshop", pt: "Oficina de Materiais Colmeia" },
+    solution: {
+      en: "A workshop that makes products and components with recycled or natural materials and honeycomb strength.",
+      pt: "Uma oficina que produz objetos e componentes com materiais reciclados ou naturais e resistência inspirada em colmeias."
+    }
+  },
+  "7C-08": {
+    name: { en: "Mangrove Water Study Center", pt: "Centro de Estudos da Água Manguezal" },
+    solution: {
+      en: "A center for studying urban water, with mangrove-inspired gardens that slow, filter, and manage rainwater.",
+      pt: "Um centro para estudar a água urbana, com jardins inspirados em manguezais que desaceleram, filtram e manejam a chuva."
+    }
+  }
 };
 
 const processImages = [
@@ -54,64 +303,76 @@ const processImages = [
 ];
 
 const solarpunkImages = [
-  { src: newImage("solarpunk-terrace.jpg"), label: "Terraces" },
-  { src: newImage("solarpunk-sketch.jpg"), label: "Concept" },
-  { src: newImage("solarpunk-city.jpg"), label: "City" }
+  { src: newImage("solarpunk-terrace.jpg"), label: { en: "Terraces", pt: "Terraços" } },
+  { src: newImage("solarpunk-sketch.jpg"), label: { en: "Concept", pt: "Conceito" } },
+  { src: newImage("solarpunk-city.jpg"), label: { en: "City", pt: "Cidade" } },
+  { src: newImage("solarpunk-green-street.jfif"), label: { en: "Green street", pt: "Rua verde" } },
+  { src: newImage("solarpunk-living-roof.jfif"), label: { en: "Living roof", pt: "Cobertura viva" } },
+  { src: newImage("solarpunk-waterfront.jfif"), label: { en: "Waterfront", pt: "Frente d'água" } },
+  { src: newImage("solarpunk-garden-tower.jfif"), label: { en: "Garden tower", pt: "Torre jardim" } }
 ];
 
 const solarpunkPillars = [
   {
-    name: "Human",
+    name: { en: "Human", pt: "Pessoas" },
     icon: Users,
-    copy: "inclusive spaces, comfort, access, community",
+    copy: { en: "inclusive spaces, comfort, access, community", pt: "espaços inclusivos, conforto, acesso e comunidade" },
     position: "human"
   },
   {
-    name: "Nature",
+    name: { en: "Nature", pt: "Natureza" },
     icon: Sprout,
-    copy: "shade, water, biodiversity, living surfaces",
+    copy: { en: "shade, water, biodiversity, living surfaces", pt: "sombra, água, biodiversidade e superfícies vivas" },
     position: "nature"
   },
   {
-    name: "Energy",
+    name: { en: "Energy", pt: "Energia" },
     icon: Zap,
-    copy: "solar power, passive cooling, efficient systems",
+    copy: { en: "solar power, passive cooling, efficient systems", pt: "energia solar, resfriamento passivo e sistemas eficientes" },
     position: "energy"
   }
 ];
 
 const fourEs = [
   {
-    name: "Environment",
-    line: "helps the planet",
+    name: { en: "Environment", pt: "Meio Ambiente" },
+    line: { en: "helps the planet", pt: "cuida do planeta" },
     icon: Sprout,
-    copy: "Green areas, water absorption, shade, biodiversity, and cleaner air make the city healthier."
+    copy: {
+      en: "Green areas, water absorption, shade, biodiversity, and cleaner air make the city healthier.",
+      pt: "Áreas verdes, absorção da água, sombra, biodiversidade e ar mais limpo tornam a cidade mais saudável."
+    }
   },
   {
-    name: "Equity",
-    line: "helps everyone",
+    name: { en: "Equity", pt: "Equidade" },
+    line: { en: "helps everyone", pt: "inclui todo mundo" },
     icon: Users,
-    copy: "A sustainable city must include housing, access, safety, comfort, and public life for different people."
+    copy: {
+      en: "A sustainable city must include housing, access, safety, comfort, and public life for different people.",
+      pt: "Uma cidade sustentável precisa incluir moradia, acesso, segurança, conforto e vida pública para pessoas diferentes."
+    }
   },
   {
-    name: "Efficiency",
-    line: "works better, not bigger",
+    name: { en: "Efficiency", pt: "Eficiência" },
+    line: { en: "works better, not bigger", pt: "funciona melhor, não apenas maior" },
     icon: Zap,
-    copy: "Shorter trips, passive comfort, clean energy, and smart infrastructure reduce waste and pressure."
+    copy: {
+      en: "Shorter trips, passive comfort, clean energy, and smart infrastructure reduce waste and pressure.",
+      pt: "Deslocamentos mais curtos, conforto passivo, energia limpa e infraestrutura inteligente reduzem desperdício e pressão."
+    }
   },
   {
-    name: "Economy",
-    line: "lasts over time",
+    name: { en: "Economy", pt: "Economia" },
+    line: { en: "lasts over time", pt: "permanece ao longo do tempo" },
     icon: Route,
-    copy: "Local services, durable systems, maintenance, and shared resources help the city keep working."
+    copy: {
+      en: "Local services, durable systems, maintenance, and shared resources help the city keep working.",
+      pt: "Serviços locais, sistemas duráveis, manutenção e recursos compartilhados ajudam a cidade a continuar funcionando."
+    }
   }
 ];
 
-type QuestionTopic = "Sustainable Urbanization" | "Solarpunk" | "Biomimicry" | "SDGs / ODS" | "Projects";
-type QuestionLanguage = "en" | "pt";
-type SourceLink = { label: string; href?: string };
-
-const topicLabels: Record<QuestionLanguage, Record<QuestionTopic, string>> = {
+const topicLabels: Record<Language, Record<QuestionTopic, string>> = {
   en: {
     "Sustainable Urbanization": "Sustainable Urbanization",
     Solarpunk: "Solarpunk",
@@ -257,48 +518,78 @@ const questionBankPt: Record<QuestionTopic, string[]> = {
 const odsOptions = [
   {
     id: "11",
-    title: "Sustainable Cities and Communities",
-    focus: "The heart of the exhibition: housing, mobility, public space, resilience, and inclusive urban life.",
-    lookFor: ["mixed-use neighborhoods", "safe public areas", "flood-aware planning", "access to services"]
+    title: { en: "Sustainable Cities and Communities", pt: "Cidades e Comunidades Sustentáveis" },
+    focus: {
+      en: "The heart of the exhibition: housing, mobility, public space, resilience, and inclusive urban life.",
+      pt: "O centro da exposição: moradia, mobilidade, espaço público, resiliência e vida urbana inclusiva."
+    },
+    lookFor: {
+      en: ["mixed-use neighborhoods", "safe public areas", "flood-aware planning", "access to services"],
+      pt: ["bairros de uso misto", "áreas públicas seguras", "planejamento contra enchentes", "acesso a serviços"]
+    }
   },
   {
     id: "7",
-    title: "Affordable and Clean Energy",
-    focus: "Connects to solar panels, passive cooling, daylight, and buildings that need less energy to stay comfortable.",
-    lookFor: ["solar energy", "shading", "natural ventilation", "efficient systems"]
+    title: { en: "Affordable and Clean Energy", pt: "Energia Limpa e Acessível" },
+    focus: {
+      en: "Connects to solar panels, passive cooling, daylight, and buildings that need less energy to stay comfortable.",
+      pt: "Conecta-se a painéis solares, resfriamento passivo, luz natural e edifícios que precisam de menos energia para serem confortáveis."
+    },
+    lookFor: {
+      en: ["solar energy", "shading", "natural ventilation", "efficient systems"],
+      pt: ["energia solar", "sombreamento", "ventilação natural", "sistemas eficientes"]
+    }
   },
   {
     id: "13",
-    title: "Climate Action",
-    focus: "Helps students explain heat islands, heavy rain, flood risk, and the need for cities that adapt to climate pressure.",
-    lookFor: ["cooler surfaces", "rain gardens", "urban trees", "resilient infrastructure"]
+    title: { en: "Climate Action", pt: "Ação contra a Mudança Global do Clima" },
+    focus: {
+      en: "Helps students explain heat islands, heavy rain, flood risk, and the need for cities that adapt to climate pressure.",
+      pt: "Ajuda os estudantes a explicar ilhas de calor, chuvas intensas, risco de enchentes e a necessidade de cidades adaptadas à crise climática."
+    },
+    lookFor: {
+      en: ["cooler surfaces", "rain gardens", "urban trees", "resilient infrastructure"],
+      pt: ["superfícies mais frescas", "jardins de chuva", "árvores urbanas", "infraestrutura resiliente"]
+    }
   },
   {
     id: "15",
-    title: "Life on Land",
-    focus: "Makes biodiversity visible through green roofs, living walls, corridors, soil, and habitats inside the city.",
-    lookFor: ["native plants", "pollinator areas", "green corridors", "soil protection"]
+    title: { en: "Life on Land", pt: "Vida Terrestre" },
+    focus: {
+      en: "Makes biodiversity visible through green roofs, living walls, corridors, soil, and habitats inside the city.",
+      pt: "Torna a biodiversidade visível por meio de telhados verdes, paredes vivas, corredores ecológicos, solo e habitats dentro da cidade."
+    },
+    lookFor: {
+      en: ["native plants", "pollinator areas", "green corridors", "soil protection"],
+      pt: ["plantas nativas", "áreas para polinizadores", "corredores verdes", "proteção do solo"]
+    }
   },
   {
     id: "6",
-    title: "Clean Water and Sanitation",
-    focus: "Links water-sensitive design to drainage, reuse, infiltration, and cleaner urban rivers.",
-    lookFor: ["rainwater capture", "permeable ground", "wetlands", "water reuse"]
+    title: { en: "Clean Water and Sanitation", pt: "Água Potável e Saneamento" },
+    focus: {
+      en: "Links water-sensitive design to drainage, reuse, infiltration, and cleaner urban rivers.",
+      pt: "Relaciona o desenho sensível à água com drenagem, reúso, infiltração e rios urbanos mais limpos."
+    },
+    lookFor: {
+      en: ["rainwater capture", "permeable ground", "wetlands", "water reuse"],
+      pt: ["captação da chuva", "solo permeável", "áreas alagáveis", "reúso da água"]
+    }
   }
 ];
 
-function SectionSources({ sources }: { sources: SourceLink[] }) {
+function SectionSources({ sources, language }: { sources: SourceLink[]; language: Language }) {
   return (
     <p className="section-sources">
-      <span>Sources:</span>{" "}
+      <span>{language === "en" ? "Sources:" : "Fontes:"}</span>{" "}
       {sources.map((source, index) => (
-        <span key={source.label}>
+        <span key={source.label.en}>
           {source.href ? (
             <a href={source.href} target="_blank" rel="noreferrer">
-              {source.label}
+              {source.label[language]}
             </a>
           ) : (
-            source.label
+            source.label[language]
           )}
           {index < sources.length - 1 ? " · " : ""}
         </span>
@@ -307,10 +598,13 @@ function SectionSources({ sources }: { sources: SourceLink[] }) {
   );
 }
 
-function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
+function GuidingQuestion({ topic, language }: { topic: QuestionTopic; language: Language }) {
   const [questionIndex, setQuestionIndex] = useState<number | null>(null);
-  const [language, setLanguage] = useState<QuestionLanguage>("en");
   const questions = language === "en" ? questionBank[topic] : questionBankPt[topic];
+
+  useEffect(() => {
+    setQuestionIndex(null);
+  }, [language, topic]);
 
   function drawQuestion() {
     setQuestionIndex((current) => {
@@ -330,18 +624,6 @@ function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
           <Sparkles size={18} aria-hidden="true" />
           {language === "en" ? "Ask a guiding question" : "Abrir pergunta-guia"}
         </button>
-        <div className="question-language" aria-label="Question language">
-          {(["en", "pt"] as const).map((option) => (
-            <button
-              key={option}
-              type="button"
-              className={language === option ? "active" : ""}
-              onClick={() => setLanguage(option)}
-            >
-              {option === "en" ? "EN" : "PT-BR"}
-            </button>
-          ))}
-        </div>
       </div>
       {questionIndex !== null ? (
         <motion.div className="question-card" initial={{ opacity: 0, y: 12, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} key={`${topic}-${questionIndex}`}>
@@ -356,7 +638,7 @@ function GuidingQuestion({ topic }: { topic: QuestionTopic }) {
   );
 }
 
-function FourEsSection() {
+function FourEsSection({ language }: { language: Language }) {
   const ref = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 78%", "end 35%"] });
   const lineProgress = useTransform(scrollYProgress, [0.05, 0.72], [0.08, 1]);
@@ -366,9 +648,13 @@ function FourEsSection() {
   return (
     <section className="four-es-section refined" id="four-es" ref={ref}>
       <div className="section-heading dark">
-        <p className="eyebrow">Sustainable urbanization</p>
-        <h2>THE 4E&apos;S</h2>
-        <p>These four ideas set the tone for the city: sustainability has to protect the environment, include people, work efficiently, and last economically.</p>
+        <p className="eyebrow">{language === "en" ? "Sustainable urbanization" : "Urbanização sustentável"}</p>
+        <h2>{language === "en" ? "THE 4E'S" : "OS 4E'S"}</h2>
+        <p>
+          {language === "en"
+            ? "These four ideas set the tone for the city: sustainability has to protect the environment, include people, work efficiently, and last economically."
+            : "Essas quatro ideias orientam a cidade: a sustentabilidade precisa proteger o meio ambiente, incluir pessoas, funcionar com eficiência e durar economicamente."}
+        </p>
       </div>
       <div className="four-es-board">
         <motion.div className="four-es-line horizontal" style={{ scaleX: lineProgress }} aria-hidden="true" />
@@ -381,7 +667,7 @@ function FourEsSection() {
           const Icon = pillar.icon;
           return (
             <motion.article
-              key={pillar.name}
+              key={pillar.name.en}
               className={`four-e-card card-${index + 1}`}
               initial={{ opacity: 0, y: 28, scale: 0.96 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -390,23 +676,33 @@ function FourEsSection() {
             >
               <Icon aria-hidden="true" />
               <div>
-                <h3>{pillar.name}</h3>
-                <span>{pillar.line}</span>
-                <p>{pillar.copy}</p>
+                <h3>{pillar.name[language]}</h3>
+                <span>{pillar.line[language]}</span>
+                <p>{pillar.copy[language]}</p>
               </div>
             </motion.article>
           );
         })}
       </div>
-      <SectionSources sources={[{ label: "classroom 4E framework for sustainable urbanization" }]} />
+      <SectionSources language={language} sources={[{ label: { en: "classroom 4E framework for sustainable urbanization", pt: "estrutura dos 4E's trabalhada em sala sobre urbanização sustentável" } }]} />
     </section>
   );
 }
 
-export function StoryExperience() {
+export function StoryExperience({ language }: { language: Language }) {
   const [activeOds, setActiveOds] = useState(odsOptions[0]);
+  const [activeSolarImage, setActiveSolarImage] = useState(0);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const { scrollYProgress } = useScroll();
   const background = useTransform(scrollYProgress, [0, 0.16, 0.28, 0.58, 0.78, 1], ["#061912", "#2b0c0d", "#143326", "#174d36", "#174d36", "#123a5a"]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSolarImage((current) => (current + 1) % solarpunkImages.length);
+    }, 2000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <main className="one-page">
@@ -425,45 +721,60 @@ export function StoryExperience() {
         <div className="hero-shade" />
         <motion.div className="hero-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
           <motion.p className="eyebrow" initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12 }}>
-            7th grade · cultural fair · maker
+            {language === "en" ? "7th grade · cultural fair · maker" : "7º ano · feira cultural · maker"}
           </motion.p>
           <motion.h1
-            aria-label="Sustainable Urbanization"
+            aria-label={language === "en" ? "Sustainable Urbanization" : "Urbanização Sustentável"}
             initial={{ y: 18, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.24, duration: 0.86, ease: "easeOut" }}
           >
-            <span aria-hidden="true">SUSTAINABLE<br />URBANIZATION</span>
+            <span aria-hidden="true">
+              {language === "en" ? (
+                <>
+                  SUSTAINABLE<br />URBANIZATION
+                </>
+              ) : (
+                <>
+                  URBANIZAÇÃO<br />SUSTENTÁVEL
+                </>
+              )}
+            </span>
           </motion.h1>
           <motion.h2 initial={{ y: 22, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.68 }}>
-            Designing a Solarpunk City
+            {language === "en" ? "Designing a Solarpunk City" : "Projetando uma Cidade Solarpunk"}
           </motion.h2>
         </motion.div>
-        <SectionSources sources={[{ label: "student visual reference set" }]} />
+        <SectionSources language={language} sources={[{ label: { en: "student visual reference set", pt: "conjunto de referências visuais dos estudantes" } }]} />
       </section>
 
       <section className="sao-section refined" id="sao-paulo">
         <div className="section-heading">
           <p className="eyebrow">São Paulo</p>
-          <h2>THE CITY WE HAVE</h2>
-          <p>São Paulo is not a simple problem. It is dense, productive, unequal, inventive, vulnerable, and alive. That complexity gave students a real place to question how cities grow.</p>
+          <h2>{language === "en" ? "THE CITY WE HAVE" : "A CIDADE QUE TEMOS"}</h2>
+          <p>
+            {language === "en"
+              ? "São Paulo is not a simple problem. It is dense, productive, unequal, inventive, vulnerable, and alive. That complexity gave students a real place to question how cities grow."
+              : "São Paulo não é um problema simples. É densa, produtiva, desigual, inventiva, vulnerável e viva. Essa complexidade deu aos estudantes um lugar real para questionar como as cidades crescem."}
+          </p>
         </div>
         <div className="sao-editorial">
           {saoImages.map((image, index) => (
-            <motion.article key={image.label} className={`sao-card sao-card-${index + 1}`} {...reveal}>
-              <Image src={image.src} alt={`${image.label} reference image for São Paulo.`} width={1100} height={760} sizes="(max-width: 760px) 92vw, 31vw" />
+            <motion.article key={image.label.en} className={`sao-card sao-card-${index + 1}`} {...reveal}>
+              <Image src={image.src} alt={`${image.label[language]} ${language === "en" ? "reference image for São Paulo." : "imagem de referência para São Paulo."}`} width={1100} height={760} sizes="(max-width: 760px) 92vw, 31vw" />
               <div>
-                <strong>{image.label}</strong>
-                <p>{image.copy}</p>
+                <strong>{image.label[language]}</strong>
+                <p>{image.copy[language]}</p>
               </div>
             </motion.article>
           ))}
         </div>
-        <GuidingQuestion topic="Sustainable Urbanization" />
+        <GuidingQuestion topic="Sustainable Urbanization" language={language} />
         <SectionSources
+          language={language}
           sources={[
-            { label: "São Paulo Master Plan / PDE", href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
-            { label: "student image set" }
+            { label: { en: "São Paulo Master Plan / PDE", pt: "Plano Diretor Estratégico de São Paulo / PDE" }, href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
+            { label: { en: "student image set", pt: "conjunto de imagens dos estudantes" } }
           ]}
         />
       </section>
@@ -474,27 +785,35 @@ export function StoryExperience() {
             <span className="orbit-ring outer" />
             <span className="orbit-ring middle" />
             <span className="orbit-ring inner" />
-            <div className="orbit-core">CITY</div>
-            <div className="orbit-label why">WHY<br /><b>Solarpunk</b></div>
-            <div className="orbit-label how">HOW<br /><b>Biomimicry</b></div>
-            <div className="orbit-label what">WHAT<br /><b>Urbanization</b></div>
+            <div className="orbit-core">{language === "en" ? "CITY" : "CIDADE"}</div>
+            <div className="orbit-label why">{language === "en" ? "WHY" : "POR QUÊ"}<br /><b>Solarpunk</b></div>
+            <div className="orbit-label how">{language === "en" ? "HOW" : "COMO"}<br /><b>{language === "en" ? "Biomimicry" : "Biomimética"}</b></div>
+            <div className="orbit-label what">{language === "en" ? "WHAT" : "O QUÊ"}<br /><b>{language === "en" ? "Urbanization" : "Urbanização"}</b></div>
           </motion.div>
           <motion.div className="golden-text" {...reveal}>
-            <p className="eyebrow">Golden circle</p>
-            <h2>WHY, HOW, WHAT.</h2>
-            <p>The project moves from vision to method to city-making: imagine a better future, learn from nature, then connect every intervention into one urban system.</p>
+            <p className="eyebrow">{language === "en" ? "Golden circle" : "Círculo dourado"}</p>
+            <h2>{language === "en" ? "WHY, HOW, WHAT." : "POR QUÊ, COMO, O QUÊ."}</h2>
+            <p>
+              {language === "en"
+                ? "The project moves from vision to method to city-making: imagine a better future, learn from nature, then connect every intervention into one urban system."
+                : "O projeto parte da visão, passa pelo método e chega à construção da cidade: imaginar um futuro melhor, aprender com a natureza e conectar cada intervenção em um único sistema urbano."}
+            </p>
           </motion.div>
         </div>
-        <SectionSources sources={[{ label: "Simon Sinek, The Golden Circle", href: "https://simonsinek.com/golden-circle" }]} />
+        <SectionSources language={language} sources={[{ label: { en: "Simon Sinek, The Golden Circle", pt: "Simon Sinek, O Círculo Dourado" }, href: "https://simonsinek.com/golden-circle" }]} />
       </section>
 
       <section className="solarpunk-section" id="solarpunk">
         <div className="section-heading dark">
-          <p className="eyebrow">Why?</p>
+          <p className="eyebrow">{language === "en" ? "Why?" : "Por quê?"}</p>
           <h2>SOLARPUNK</h2>
-          <p>Solarpunk is an optimistic design lens. It asks how people, ecosystems, and clean energy can support each other in everyday urban life.</p>
+          <p>
+            {language === "en"
+              ? "Solarpunk is an optimistic design lens. It asks how people, ecosystems, and clean energy can support each other in everyday urban life."
+              : "Solarpunk é uma lente de projeto otimista. Ele pergunta como pessoas, ecossistemas e energia limpa podem se apoiar na vida urbana cotidiana."}
+          </p>
         </div>
-        <div className="solar-trio" aria-label="Human, nature, and energy system animation">
+        <div className="solar-trio" aria-label={language === "en" ? "Human, nature, and energy system animation" : "Animação de sistema com pessoas, natureza e energia"}>
           <svg viewBox="0 0 900 580" className="solar-trio-lines" aria-hidden="true">
             <path d="M450 112 L190 438 L710 438 Z" />
             <path d="M450 112 C390 250 350 330 190 438" />
@@ -510,13 +829,13 @@ export function StoryExperience() {
           >
             <SunMedium aria-hidden="true" />
             <span>Solarpunk</span>
-            <b>city system</b>
+            <b>{language === "en" ? "city system" : "sistema urbano"}</b>
           </motion.div>
           {solarpunkPillars.map((pillar, index) => {
             const Icon = pillar.icon;
             return (
               <motion.article
-                key={pillar.name}
+                key={pillar.name.en}
                 className={`solar-node ${pillar.position}`}
                 initial={{ opacity: 0, scale: 0.78 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -524,144 +843,219 @@ export function StoryExperience() {
                 transition={{ duration: 0.55, delay: index * 0.12, ease: "easeOut" }}
               >
                 <Icon aria-hidden="true" />
-                <h3>{pillar.name}</h3>
-                <p>{pillar.copy}</p>
+                <h3>{pillar.name[language]}</h3>
+                <p>{pillar.copy[language]}</p>
               </motion.article>
             );
           })}
         </div>
-        <div className="solarpunk-gallery">
-          {solarpunkImages.map((image) => (
-            <motion.figure key={image.src} {...reveal}>
-              <Image src={image.src} alt={`${image.label} solarpunk visual reference.`} width={820} height={620} sizes="(max-width: 760px) 68vw, 24vw" />
-              <figcaption><SunMedium size={15} aria-hidden="true" /> {image.label}</figcaption>
-            </motion.figure>
-          ))}
-        </div>
-        <GuidingQuestion topic="Solarpunk" />
+        <motion.div className="solarpunk-slideshow" {...reveal}>
+          <div className="solarpunk-stage" aria-live="polite">
+            {solarpunkImages.map((image, index) => (
+              <figure key={image.src} className={activeSolarImage === index ? "active" : ""} aria-hidden={activeSolarImage !== index}>
+                <Image
+                  src={image.src}
+                  alt={`${image.label[language]} ${language === "en" ? "solarpunk visual reference." : "referência visual solarpunk."}`}
+                  width={1100}
+                  height={760}
+                  sizes="(max-width: 760px) 92vw, 980px"
+                />
+                <figcaption>
+                  <SunMedium size={15} aria-hidden="true" />
+                  {image.label[language]}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="solarpunk-dots" aria-label={language === "en" ? "Solarpunk image selector" : "Seletor de imagens solarpunk"}>
+            {solarpunkImages.map((image, index) => (
+              <button
+                key={image.src}
+                type="button"
+                className={activeSolarImage === index ? "active" : ""}
+                aria-label={`${language === "en" ? "Show" : "Mostrar"} ${image.label[language]}`}
+                aria-pressed={activeSolarImage === index}
+                onClick={() => setActiveSolarImage(index)}
+              />
+            ))}
+          </div>
+        </motion.div>
+        <GuidingQuestion topic="Solarpunk" language={language} />
         <SectionSources
+          language={language}
           sources={[
-            { label: "A Solarpunk Manifesto", href: "https://re-des.org/a-solarpunk-manifesto/" },
-            { label: "Project Hieroglyph solarpunk notes", href: "https://hieroglyph.asu.edu/2014/09/solarpunk-notes-toward-a-manifesto/" },
-            { label: "student image set" }
+            { label: { en: "A Solarpunk Manifesto", pt: "Um Manifesto Solarpunk" }, href: "https://re-des.org/a-solarpunk-manifesto/" },
+            { label: { en: "Project Hieroglyph solarpunk notes", pt: "Notas solarpunk do Project Hieroglyph" }, href: "https://hieroglyph.asu.edu/2014/09/solarpunk-notes-toward-a-manifesto/" },
+            { label: { en: "student image set", pt: "conjunto de imagens dos estudantes" } }
           ]}
         />
       </section>
 
-      <FourEsSection />
+      <FourEsSection language={language} />
 
       <section className="bio-section refined" id="biomimicry">
         <div className="section-heading">
-          <p className="eyebrow">How?</p>
-          <h2>BIOMIMICRY</h2>
-          <p>Nature becomes a design teacher: organisms, patterns, and ecosystems suggest strategies for comfort, resilience, structure, and adaptation.</p>
+          <p className="eyebrow">{language === "en" ? "How?" : "Como?"}</p>
+          <h2>{language === "en" ? "BIOMIMICRY" : "BIOMIMÉTICA"}</h2>
+          <p>
+            {language === "en"
+              ? "Nature becomes a design teacher: organisms, patterns, and ecosystems suggest strategies for comfort, resilience, structure, and adaptation."
+              : "A natureza se torna professora de projeto: organismos, padrões e ecossistemas sugerem estratégias de conforto, resiliência, estrutura e adaptação."}
+          </p>
           <a className="deep-dive-link" href="https://biomimi.vercel.app/" target="_blank" rel="noreferrer">
-            Open biomimicry deep dive <ExternalLink size={17} aria-hidden="true" />
+            {language === "en" ? "Open biomimicry deep dive" : "Abrir estudo aprofundado de biomimética"} <ExternalLink size={17} aria-hidden="true" />
           </a>
         </div>
         <div className="bio-bento">
-          {biomimicryStories.map((story) => (
+          {biomimicryStories.map((story) => {
+            const copy = biomimicryCopy[story.name];
+            return (
             <motion.article key={story.name} className="bio-bento-card" {...reveal}>
-              <Image src={bioImages[story.name]} alt={`${story.name} biomimicry reference.`} width={900} height={900} sizes="(max-width: 760px) 88vw, 28vw" />
+              <Image src={bioImages[story.name]} alt={`${biomimicryLabels[story.name][language]} ${language === "en" ? "biomimicry reference." : "referência de biomimética."}`} width={900} height={900} sizes="(max-width: 760px) 88vw, 28vw" />
               <div>
-                <h3>{story.title}</h3>
-                <p>{story.principle}</p>
+                <h3>{copy.title[language]}</h3>
+                <p>{copy.principle[language]}</p>
               </div>
             </motion.article>
-          ))}
+            );
+          })}
         </div>
-        <GuidingQuestion topic="Biomimicry" />
+        <GuidingQuestion topic="Biomimicry" language={language} />
         <SectionSources
+          language={language}
           sources={[
-            { label: "The Biomimicry Institute", href: "https://biomimicry.org/inspiration/what-is-biomimicry/" },
-            { label: "biomimicry deep dive", href: "https://biomimi.vercel.app/" },
-            { label: "student image set" }
+            { label: { en: "The Biomimicry Institute", pt: "The Biomimicry Institute" }, href: "https://biomimicry.org/inspiration/what-is-biomimicry/" },
+            { label: { en: "biomimicry deep dive", pt: "estudo aprofundado de biomimética" }, href: "https://biomimi.vercel.app/" },
+            { label: { en: "student image set", pt: "conjunto de imagens dos estudantes" } }
           ]}
         />
       </section>
 
       <section className="planning-section refined" id="planning">
         <div className="section-heading">
-          <p className="eyebrow">Master Plan</p>
-          <h2>SÃO PAULO AS A SYSTEM</h2>
-          <p>The Master Plan is the city's growth agreement: it connects where people live, how they move, where nature is protected, and how land should serve public life.</p>
+          <p className="eyebrow">{language === "en" ? "Master Plan" : "Plano Diretor"}</p>
+          <h2>{language === "en" ? "SÃO PAULO AS A SYSTEM" : "SÃO PAULO COMO SISTEMA"}</h2>
+          <p>
+            {language === "en"
+              ? "The Master Plan is the city's growth agreement: it connects where people live, how they move, where nature is protected, and how land should serve public life."
+              : "O Plano Diretor é o acordo de crescimento da cidade: conecta onde as pessoas vivem, como se movem, onde a natureza é protegida e como a terra deve servir à vida pública."}
+          </p>
         </div>
         <div className="master-plan-grid">
           <article className="master-plan-card featured">
             <MapPinned aria-hidden="true" />
             <span>01</span>
-            <h3>Grow where the city already works</h3>
-            <p>More homes, services, and jobs should be close to public transport and existing infrastructure, so growth creates shorter trips instead of more pressure.</p>
+            <h3>{language === "en" ? "Grow where the city already works" : "Crescer onde a cidade já funciona"}</h3>
+            <p>
+              {language === "en"
+                ? "More homes, services, and jobs should be close to public transport and existing infrastructure, so growth creates shorter trips instead of more pressure."
+                : "Mais moradias, serviços e empregos devem ficar perto do transporte público e da infraestrutura existente, para que o crescimento crie viagens mais curtas em vez de mais pressão."}
+            </p>
           </article>
           <article className="master-plan-card">
             <Users aria-hidden="true" />
             <span>02</span>
-            <h3>Make housing part of sustainability</h3>
-            <p>Social housing and access to the city matter because an ecological city cannot exclude the people who need the city most.</p>
+            <h3>{language === "en" ? "Make housing part of sustainability" : "Fazer da moradia parte da sustentabilidade"}</h3>
+            <p>
+              {language === "en"
+                ? "Social housing and access to the city matter because an ecological city cannot exclude the people who need the city most."
+                : "Habitação social e acesso à cidade importam porque uma cidade ecológica não pode excluir as pessoas que mais precisam dela."}
+            </p>
           </article>
           <article className="master-plan-card">
             <Route aria-hidden="true" />
             <span>03</span>
-            <h3>Plan land use and mobility together</h3>
-            <p>Where buildings go changes traffic, walking, services, and time. Urban planning is also daily-life planning.</p>
+            <h3>{language === "en" ? "Plan land use and mobility together" : "Planejar uso do solo e mobilidade juntos"}</h3>
+            <p>
+              {language === "en"
+                ? "Where buildings go changes traffic, walking, services, and time. Urban planning is also daily-life planning."
+                : "A localização dos edifícios muda o trânsito, os caminhos a pé, os serviços e o tempo. Planejamento urbano também é planejamento da vida diária."}
+            </p>
           </article>
           <article className="master-plan-card">
             <Sprout aria-hidden="true" />
             <span>04</span>
-            <h3>Treat climate as urban infrastructure</h3>
-            <p>Green areas, permeable ground, shade, and water strategies are not decoration. They protect people from heat, floods, and environmental risk.</p>
+            <h3>{language === "en" ? "Treat climate as urban infrastructure" : "Tratar o clima como infraestrutura urbana"}</h3>
+            <p>
+              {language === "en"
+                ? "Green areas, permeable ground, shade, and water strategies are not decoration. They protect people from heat, floods, and environmental risk."
+                : "Áreas verdes, solo permeável, sombra e estratégias de água não são decoração. Elas protegem as pessoas do calor, das enchentes e dos riscos ambientais."}
+            </p>
           </article>
           <article className="master-plan-card">
             <SunMedium aria-hidden="true" />
             <span>05</span>
-            <h3>Activate the ground floor</h3>
-            <p>Streets become safer and more useful when buildings connect to sidewalks with entrances, shops, services, and shared public life.</p>
+            <h3>{language === "en" ? "Activate the ground floor" : "Ativar o térreo"}</h3>
+            <p>
+              {language === "en"
+                ? "Streets become safer and more useful when buildings connect to sidewalks with entrances, shops, services, and shared public life."
+                : "As ruas ficam mais seguras e úteis quando os edifícios se conectam às calçadas com entradas, lojas, serviços e vida pública compartilhada."}
+            </p>
           </article>
           <article className="master-plan-card">
             <Sparkles aria-hidden="true" />
             <span>06</span>
-            <h3>Land has a social role</h3>
-            <p>Empty or underused land is not neutral. In a fairer city, land should help produce housing, services, nature, and opportunity.</p>
+            <h3>{language === "en" ? "Land has a social role" : "A terra tem função social"}</h3>
+            <p>
+              {language === "en"
+                ? "Empty or underused land is not neutral. In a fairer city, land should help produce housing, services, nature, and opportunity."
+                : "Terrenos vazios ou subutilizados não são neutros. Em uma cidade mais justa, a terra deve ajudar a produzir moradia, serviços, natureza e oportunidade."}
+            </p>
           </article>
         </div>
         <SectionSources
+          language={language}
           sources={[
-            { label: "Gestão Urbana: Plano Diretor", href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
-            { label: "PDE 2023 revision", href: "https://gestaourbana.prefeitura.sp.gov.br/noticias/entenda-os-ajustes-sancionados-para-o-plano-diretor-na-area-de-mobilidade/" },
-            { label: "Prefeitura legislation page", href: "https://capital.sp.gov.br/web/licenciamento/w/legislacao/288078" }
+            { label: { en: "Gestão Urbana: Master Plan", pt: "Gestão Urbana: Plano Diretor" }, href: "https://gestaourbana.prefeitura.sp.gov.br/marco-regulatorio/plano-diretor/texto-da-lei-ilustrado/" },
+            { label: { en: "PDE 2023 revision", pt: "Revisão do PDE 2023" }, href: "https://gestaourbana.prefeitura.sp.gov.br/noticias/entenda-os-ajustes-sancionados-para-o-plano-diretor-na-area-de-mobilidade/" },
+            { label: { en: "Prefeitura legislation page", pt: "Página de legislação da Prefeitura" }, href: "https://capital.sp.gov.br/web/licenciamento/w/legislacao/288078" }
           ]}
         />
       </section>
 
       <section className="process-section refined" id="process">
         <div className="section-heading dark">
-          <p className="eyebrow">Maker process</p>
-          <h2>FROM SKETCH TO CITY MODEL</h2>
-          <p>Students moved between drawings, references, material tests, and physical models to turn sustainable ideas into an urban proposal. Swipe sideways to see more process images.</p>
+          <p className="eyebrow">{language === "en" ? "Maker process" : "Processo maker"}</p>
+          <h2>{language === "en" ? "FROM SKETCH TO CITY MODEL" : "DO ESBOÇO AO MODELO DE CIDADE"}</h2>
+          <p>
+            {language === "en"
+              ? "Students moved between drawings, references, material tests, and physical models to turn sustainable ideas into an urban proposal. Swipe sideways to see more process images."
+              : "Os estudantes passaram por desenhos, referências, testes de materiais e modelos físicos para transformar ideias sustentáveis em uma proposta urbana. Deslize para o lado para ver mais imagens do processo."}
+          </p>
         </div>
         <div className="side-scroll-hint" aria-hidden="true">
-          <span>Swipe</span>
+          <span>{language === "en" ? "Swipe" : "Deslize"}</span>
           <i />
-          <span>more images</span>
+          <span>{language === "en" ? "more images" : "mais imagens"}</span>
         </div>
         <div className="process-strip">
           {processImages.map((src, index) => (
             <motion.figure key={src} className={index === 2 || index === 6 ? "wide" : ""} {...reveal}>
-              <Image src={src} alt="Student sketch or model-building process for the solarpunk city project." width={1000} height={760} sizes="(max-width: 760px) 72vw, 24vw" />
+              <Image
+                src={src}
+                alt={language === "en" ? "Student sketch or model-building process for the solarpunk city project." : "Esboço ou processo de construção de modelo dos estudantes para o projeto de cidade solarpunk."}
+                width={1000}
+                height={760}
+                sizes="(max-width: 760px) 72vw, 24vw"
+              />
             </motion.figure>
           ))}
         </div>
-        <SectionSources sources={[{ label: "student sketches, model photos, and classroom documentation" }]} />
+        <SectionSources language={language} sources={[{ label: { en: "student sketches, model photos, and classroom documentation", pt: "esboços dos estudantes, fotos dos modelos e documentação de sala" } }]} />
       </section>
 
       <section className="ods-section refined" id="ods">
         <div className="section-heading">
           <p className="eyebrow">ODS / SDGs</p>
-          <h2>GLOBAL GOALS, LOCAL DECISIONS</h2>
-          <p>The SDGs help students connect a model city to bigger questions: climate, housing, water, energy, biodiversity, and justice.</p>
+          <h2>{language === "en" ? "GLOBAL GOALS, LOCAL DECISIONS" : "METAS GLOBAIS, DECISÕES LOCAIS"}</h2>
+          <p>
+            {language === "en"
+              ? "The SDGs help students connect a model city to bigger questions: climate, housing, water, energy, biodiversity, and justice."
+              : "Os ODS ajudam os estudantes a conectar uma cidade-modelo a questões maiores: clima, moradia, água, energia, biodiversidade e justiça."}
+          </p>
         </div>
         <motion.div className="ods-explorer" {...reveal}>
-          <label htmlFor="ods-select">Explore an ODS</label>
+          <label htmlFor="ods-select">{language === "en" ? "Explore an SDG" : "Explore um ODS"}</label>
           <div className="select-shell">
             <select
               id="ods-select"
@@ -670,56 +1064,71 @@ export function StoryExperience() {
             >
               {odsOptions.map((ods) => (
                 <option key={ods.id} value={ods.id}>
-                  ODS {ods.id} - {ods.title}
+                  {language === "en" ? "SDG" : "ODS"} {ods.id} - {ods.title[language]}
                 </option>
               ))}
             </select>
             <ChevronDown size={20} aria-hidden="true" />
           </div>
           <article>
-            <span>ODS {activeOds.id}</span>
-            <h3>{activeOds.title}</h3>
-            <p>{activeOds.focus}</p>
+            <span>{language === "en" ? "SDG" : "ODS"} {activeOds.id}</span>
+            <h3>{activeOds.title[language]}</h3>
+            <p>{activeOds.focus[language]}</p>
             <div>
-              {activeOds.lookFor.map((item) => (
+              {activeOds.lookFor[language].map((item) => (
                 <b key={item}>{item}</b>
               ))}
             </div>
           </article>
         </motion.div>
-        <GuidingQuestion topic="SDGs / ODS" />
+        <GuidingQuestion topic="SDGs / ODS" language={language} />
         <SectionSources
+          language={language}
           sources={[
-            { label: "UN Sustainable Development Goals", href: "https://sdgs.un.org/goals" },
-            { label: "UN Goal 11", href: "https://sdgs.un.org/goals/goal11" }
+            { label: { en: "UN Sustainable Development Goals", pt: "Objetivos de Desenvolvimento Sustentável da ONU" }, href: "https://sdgs.un.org/goals" },
+            { label: { en: "UN Goal 11", pt: "ODS 11 da ONU" }, href: "https://sdgs.un.org/goals/goal11" }
           ]}
         />
       </section>
 
       <section className="projects-teaser refined" id="projects">
         <div className="section-heading">
-          <h2>OUR SOLARPUNK CITY</h2>
+          <h2>{language === "en" ? "OUR SOLARPUNK CITY" : "NOSSA CIDADE SOLARPUNK"}</h2>
         </div>
         <div className="project-bento-grid">
-          {cityProjects.map((project, index) => (
-            <motion.details key={project.id} className={`project-bento ${index % 7 === 0 ? "featured" : ""}`} {...reveal}>
-              <summary>
-                <span>{project.biomimicry}</span>
-                <h3>{project.projectName}</h3>
+          {cityProjects.map((project, index) => {
+            const copy = projectCopy[project.id];
+            return (
+            <motion.details key={project.id} open={activeProjectId === project.id} className={`project-bento ${index % 7 === 0 ? "featured" : ""}`} {...reveal}>
+              <summary
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActiveProjectId((current) => (current === project.id ? null : project.id));
+                }}
+              >
+                <span>{biomimicryLabels[project.biomimicry][language]}</span>
+                <h3>{copy.name[language]}</h3>
                 <p>{project.students}</p>
               </summary>
               <div className="project-bento-body">
-                <p>{project.solution}</p>
+                <p>{copy.solution[language]}</p>
                 <div>
-                  {project.systems.map((system) => <span key={system}>{system}</span>)}
-                  {project.sdgs.map((sdg) => <span key={sdg}>SDG {sdg}</span>)}
+                  {project.systems.map((system) => <span key={system}>{systemLabels[system][language]}</span>)}
+                  {project.sdgs.map((sdg) => <span key={sdg}>{language === "en" ? "SDG" : "ODS"} {sdg}</span>)}
                 </div>
-                <GuidingQuestion topic="Projects" />
+                <GuidingQuestion topic="Projects" language={language} />
               </div>
             </motion.details>
-          ))}
+            );
+          })}
         </div>
-        <SectionSources sources={[{ label: "student project proposals and model documentation" }, { label: "UN Sustainable Development Goals", href: "https://sdgs.un.org/goals" }]} />
+        <SectionSources
+          language={language}
+          sources={[
+            { label: { en: "student project proposals and model documentation", pt: "propostas dos projetos dos estudantes e documentação dos modelos" } },
+            { label: { en: "UN Sustainable Development Goals", pt: "Objetivos de Desenvolvimento Sustentável da ONU" }, href: "https://sdgs.un.org/goals" }
+          ]}
+        />
       </section>
     </main>
   );
