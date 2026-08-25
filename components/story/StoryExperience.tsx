@@ -120,6 +120,71 @@ const biomimicryLabels: Record<string, Localized> = {
   Cactus: { en: "Cactus", pt: "Cacto" }
 };
 
+const urbanFunctionLabels: Record<string, Localized> = {
+  Housing: { en: "Housing", pt: "Moradia" },
+  "Mixed Use": { en: "Mixed use", pt: "Uso misto" },
+  Work: { en: "Work", pt: "Trabalho" },
+  Commerce: { en: "Commerce", pt: "Comércio" },
+  Public: { en: "Public use", pt: "Uso público" },
+  Culture: { en: "Culture", pt: "Cultura" },
+  "Green Space": { en: "Green space", pt: "Área verde" },
+  Education: { en: "Education", pt: "Educação" }
+};
+
+const biomimicryTechTopics: Record<string, Localized> = {
+  Honeycomb: {
+    en: "Honeycomb geometry creates repeated modules that use material efficiently, stay strong, and can be rearranged as the city changes.",
+    pt: "A geometria da colmeia cria módulos repetidos que usam material com eficiência, ganham resistência e podem ser reorganizados conforme a cidade muda."
+  },
+  Moss: {
+    en: "Moss-inspired surfaces work like living skins: they hold moisture, cool the microclimate, and turn blank walls into biodiversity support.",
+    pt: "Superfícies inspiradas em musgo funcionam como peles vivas: retêm umidade, resfriam o microclima e transformam paredes em suporte para biodiversidade."
+  },
+  Mangrove: {
+    en: "Mangrove-inspired supports lift the building, let water pass below, and create a structure that responds to wet and unstable ground.",
+    pt: "Apoios inspirados em manguezais elevam o edifício, deixam a água passar por baixo e criam uma estrutura adaptada a solos úmidos e instáveis."
+  },
+  Termite: {
+    en: "Termite-mound logic uses connected air channels so hot air can leave and cooler air can move through the building with less mechanical cooling.",
+    pt: "A lógica do cupinzeiro usa canais de ar conectados para expulsar o ar quente e mover ar mais fresco pelo edifício com menos resfriamento mecânico."
+  },
+  Cactus: {
+    en: "Cactus-inspired forms protect against strong sun through shading, smaller openings, and surfaces designed to reduce heat gain.",
+    pt: "Formas inspiradas em cactos protegem contra o sol forte com sombreamento, aberturas menores e superfícies pensadas para reduzir o ganho de calor."
+  }
+};
+
+const systemTopicCopy: Record<string, Localized> = {
+  Water: {
+    en: "Water is treated as visible infrastructure, with space for rain, absorption, flow, reuse, or flood protection.",
+    pt: "A água é tratada como infraestrutura visível, com espaço para chuva, absorção, fluxo, reúso ou proteção contra enchentes."
+  },
+  Energy: {
+    en: "The design reduces energy pressure through passive comfort, efficient systems, solar logic, or less dependence on air conditioning.",
+    pt: "O projeto reduz a pressão energética com conforto passivo, sistemas eficientes, lógica solar ou menor dependência de ar-condicionado."
+  },
+  Greenery: {
+    en: "Vegetation is part of performance: it creates shade, habitat, thermal comfort, and a healthier everyday experience.",
+    pt: "A vegetação faz parte do desempenho: cria sombra, habitat, conforto térmico e uma experiência cotidiana mais saudável."
+  },
+  Mobility: {
+    en: "The proposal connects use and location so daily trips can become shorter, clearer, and less dependent on cars.",
+    pt: "A proposta conecta uso e localização para que os deslocamentos diários sejam mais curtos, claros e menos dependentes do carro."
+  },
+  Waste: {
+    en: "Material choices and flexible spaces support repair, reuse, modular construction, and less waste over time.",
+    pt: "Escolhas de materiais e espaços flexíveis apoiam reparo, reúso, construção modular e menos desperdício ao longo do tempo."
+  },
+  "Public Space": {
+    en: "Shared areas make sustainability social, creating places for meeting, safety, access, and community life.",
+    pt: "Áreas compartilhadas tornam a sustentabilidade social, criando lugares de encontro, segurança, acesso e vida comunitária."
+  },
+  Climate: {
+    en: "The project responds to urban heat, intense rain, and comfort through shade, ventilation, permeability, or resilient structure.",
+    pt: "O projeto responde ao calor urbano, à chuva intensa e ao conforto por meio de sombra, ventilação, permeabilidade ou estrutura resiliente."
+  }
+};
+
 const projectCopy: Record<string, { name: Localized; solution: Localized }> = {
   "7A-01": {
     name: { en: "Termite Apartment Commons", pt: "Apartamentos Comunitários Cupinzeiro" },
@@ -311,6 +376,41 @@ const solarpunkImages = [
   { src: newImage("solarpunk-waterfront.jfif"), label: { en: "Waterfront", pt: "Frente d'água" } },
   { src: newImage("solarpunk-garden-tower.jfif"), label: { en: "Garden tower", pt: "Torre jardim" } }
 ];
+
+function localizedList(items: string[], labels: Record<string, Localized>, language: Language) {
+  return items.map((item) => labels[item]?.[language] ?? item).join(language === "en" ? ", " : ", ");
+}
+
+function getProjectTopics(project: (typeof cityProjects)[number], language: Language) {
+  const primarySystems = project.systems.slice(0, 2);
+  return [
+    {
+      title:
+        language === "en"
+          ? `Biomimicry tech: ${biomimicryLabels[project.biomimicry][language]}`
+          : `Tecnologia biomimética: ${biomimicryLabels[project.biomimicry][language]}`,
+      copy: biomimicryTechTopics[project.biomimicry][language]
+    },
+    {
+      title: language === "en" ? "Urban role" : "Função urbana",
+      copy:
+        language === "en"
+          ? `This proposal works as ${localizedList(project.urbanFunction, urbanFunctionLabels, language).toLowerCase()}, so the building is connected to daily needs instead of being an isolated object.`
+          : `A proposta funciona como ${localizedList(project.urbanFunction, urbanFunctionLabels, language).toLowerCase()}, conectando o edifício às necessidades diárias em vez de deixá-lo como objeto isolado.`
+    },
+    ...primarySystems.map((system) => ({
+      title: systemLabels[system][language],
+      copy: systemTopicCopy[system][language]
+    })),
+    {
+      title: language === "en" ? "SDG connection" : "Conexão com os ODS",
+      copy:
+        language === "en"
+          ? `The project supports SDG ${project.sdgs.join(", SDG ")} by turning sustainability goals into visible decisions in the model.`
+          : `O projeto apoia ODS ${project.sdgs.join(", ODS ")} ao transformar metas de sustentabilidade em decisões visíveis no modelo.`
+    }
+  ];
+}
 
 const solarpunkPillars = [
   {
@@ -1106,6 +1206,7 @@ export function StoryExperience({ language }: { language: Language }) {
         <div className="project-bento-grid">
           {cityProjects.map((project, index) => {
             const copy = projectCopy[project.id];
+            const topics = getProjectTopics(project, language);
             return (
             <motion.details key={project.id} open={activeProjectId === project.id} className={`project-bento ${index % 7 === 0 ? "featured" : ""}`} {...reveal}>
               <summary
@@ -1121,9 +1222,13 @@ export function StoryExperience({ language }: { language: Language }) {
               </summary>
               <div className="project-bento-body">
                 <p>{copy.solution[language]}</p>
-                <div>
-                  {project.systems.map((system) => <span key={system}>{systemLabels[system][language]}</span>)}
-                  {project.sdgs.map((sdg) => <span key={sdg}>{language === "en" ? "SDG" : "ODS"} {sdg}</span>)}
+                <div className="project-topic-list">
+                  {topics.map((topic) => (
+                    <article key={topic.title}>
+                      <h4>{topic.title}</h4>
+                      <p>{topic.copy}</p>
+                    </article>
+                  ))}
                 </div>
                 <GuidingQuestion topic="Projects" language={language} />
               </div>

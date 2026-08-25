@@ -1863,14 +1863,14 @@ blockquote {
   padding: 0 1rem 1rem;
 }
 
-.project-bento-body > div {
+.project-bento-body > div:not(.project-topic-list) {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.8rem;
 }
 
-.project-bento-body span {
+.project-bento-body > div:not(.project-topic-list) span {
   padding: 0.35rem 0.55rem;
   border-radius: 999px;
   background: rgba(216, 240, 163, 0.14);
@@ -3376,6 +3376,47 @@ blockquote {
   background: var(--ods-color);
 }
 
+.question-card,
+.question-card span,
+.question-card p,
+.question-card svg {
+  color: #08170f;
+}
+
+.project-topic-list {
+  display: grid;
+  gap: 0.68rem;
+  margin-top: 1rem;
+}
+
+.project-topic-list article {
+  padding: 0.85rem;
+  border: 1px solid rgba(216, 240, 163, 0.16);
+  border-radius: 0.95rem;
+  background:
+    linear-gradient(135deg, rgba(216, 240, 163, 0.12), rgba(255, 255, 255, 0.055)),
+    rgba(7, 29, 22, 0.2);
+}
+
+.project-topic-list h4 {
+  margin: 0 0 0.35rem;
+  color: var(--lime-soft);
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1rem, 4vw, 1.22rem);
+  line-height: 1.05;
+}
+
+.project-topic-list p {
+  margin: 0;
+  color: rgba(250, 250, 244, 0.82);
+  font-size: 0.9rem;
+  line-height: 1.48;
+}
+
+.project-bento-body > p {
+  margin-bottom: 1rem;
+}
+
 @media (min-width: 720px) {
   .glass-nav.labeled-nav {
     min-height: 49px;
@@ -3384,5 +3425,9 @@ blockquote {
 
   .nav-links.labeled .nav-link {
     min-height: 37px;
+  }
+
+  .project-topic-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
