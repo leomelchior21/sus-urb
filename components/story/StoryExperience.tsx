@@ -3,7 +3,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown, ExternalLink, HelpCircle, MapPinned, Route, Sparkles, Sprout, SunMedium, Users, Zap } from "lucide-react";
+import { ArrowDown, ChevronDown, ExternalLink, HelpCircle, MapPinned, Route, Sparkles, Sprout, SunMedium, Users, Zap } from "lucide-react";
 import { biomimicryStories } from "@/data/biomimicry";
 import { cityProjects } from "@/data/projects";
 import type { Language } from "@/app/page";
@@ -864,7 +864,6 @@ export function StoryExperience({ language }: { language: Language }) {
             {language === "en" ? "Designing a Solarpunk City" : "Projetando uma Cidade Solarpunk"}
           </motion.h2>
         </motion.div>
-        <SectionSources language={language} sources={[{ label: { en: "student visual reference set", pt: "conjunto de referências visuais dos estudantes" } }]} />
       </section>
 
       <section className="intro-section" id="introduction">
@@ -885,6 +884,9 @@ export function StoryExperience({ language }: { language: Language }) {
             <span>{language === "en" ? "Data with imagination" : "Dados com imaginação"}</span>
             <span>{language === "en" ? "Technology serving community" : "Tecnologia a serviço da comunidade"}</span>
           </div>
+          <a className="intro-scroll-cue" href="#sao-paulo" aria-label={language === "en" ? "Scroll to São Paulo section" : "Ir para a seção São Paulo"}>
+            <ArrowDown size={22} aria-hidden="true" />
+          </a>
         </motion.div>
       </section>
 
