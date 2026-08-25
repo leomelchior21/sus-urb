@@ -867,6 +867,27 @@ export function StoryExperience({ language }: { language: Language }) {
         <SectionSources language={language} sources={[{ label: { en: "student visual reference set", pt: "conjunto de referências visuais dos estudantes" } }]} />
       </section>
 
+      <section className="intro-section" id="introduction">
+        <motion.div className="intro-copy" {...reveal}>
+          <p className="eyebrow">{language === "en" ? "The challenge" : "O desafio"}</p>
+          <h2>
+            {language === "en"
+              ? "How can a city grow without losing the people who make it alive?"
+              : "Como uma cidade pode crescer sem perder as pessoas que dão vida a ela?"}
+          </h2>
+          <p>
+            {language === "en"
+              ? "Students investigated sustainable urbanization as a real design question: how to balance mobility, water, energy, green spaces, pollution, inequality, and community identity. Inspired by SDG 11, they studied data, explored contemporary architecture, and used digital fabrication to turn research into proposals for more inclusive and resilient cities."
+              : "Os estudantes investigaram a urbanização sustentável como uma pergunta real de projeto: como equilibrar mobilidade, água, energia, áreas verdes, poluição, desigualdade e identidade comunitária. Inspirados pelo ODS 11, analisaram dados, exploraram arquitetura contemporânea e usaram fabricação digital para transformar pesquisa em propostas para cidades mais inclusivas e resilientes."}
+          </p>
+          <div className="intro-points">
+            <span>{language === "en" ? "Context before form" : "Contexto antes da forma"}</span>
+            <span>{language === "en" ? "Data with imagination" : "Dados com imaginação"}</span>
+            <span>{language === "en" ? "Technology serving community" : "Tecnologia a serviço da comunidade"}</span>
+          </div>
+        </motion.div>
+      </section>
+
       <section className="sao-section refined" id="sao-paulo">
         <div className="section-heading">
           <p className="eyebrow">São Paulo</p>
