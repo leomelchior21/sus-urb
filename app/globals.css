@@ -3213,52 +3213,6 @@ blockquote {
   bottom: 6.8rem;
 }
 
-.solarpunk-mosaic {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.62rem;
-  width: min(100% - 1.4rem, 1080px);
-  margin: 1rem auto 5.4rem;
-}
-
-.solar-photo-tile {
-  position: relative;
-  min-height: clamp(145px, 42vw, 230px);
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid rgba(216, 240, 163, 0.18);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.solar-photo-tile img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: solarTileFade 640ms ease both;
-}
-
-.solar-photo-tile figcaption {
-  position: absolute;
-  left: 0.55rem;
-  bottom: 0.55rem;
-  display: inline-flex;
-  max-width: calc(100% - 1.1rem);
-  align-items: center;
-  gap: 0.28rem;
-  padding: 0.38rem 0.52rem;
-  border-radius: 999px;
-  color: var(--forest-950);
-  background: rgba(216, 240, 163, 0.92);
-  font-size: 0.68rem;
-  font-weight: 950;
-  line-height: 1;
-}
-
-.solar-photo-tile figcaption svg {
-  flex: 0 0 auto;
-}
-
 .project-bento summary {
   position: relative;
   padding-right: 3.3rem;
@@ -3303,17 +3257,6 @@ blockquote {
   animation: disclosurePulse 2s ease-in-out infinite;
 }
 
-@keyframes solarTileFade {
-  from {
-    opacity: 0.52;
-    transform: scale(1.035);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @keyframes projectInvite {
   0%,
   100% {
@@ -3350,13 +3293,6 @@ blockquote {
     min-height: 46px;
   }
 
-  .solarpunk-mosaic {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
-
-  .solar-photo-tile {
-    min-height: 210px;
-  }
 }
 
 /* Dramatic section color pass and dynamic SDG palette */
@@ -3596,5 +3532,108 @@ blockquote {
 @media (min-width: 720px) {
   .glass-nav.labeled-nav {
     width: min(540px, calc(100vw - 2rem));
+  }
+}
+
+/* Solarpunk image strip and calmer section palette */
+.solarpunk-section,
+.bio-section.refined,
+.planning-section.refined,
+.process-section.refined {
+  display: block;
+  min-height: auto;
+  margin-top: 0;
+  padding: 0 0 5rem;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(216, 240, 163, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(15, 47, 35, 0.98), rgba(19, 61, 45, 0.9));
+}
+
+.golden-section.refined {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(216, 240, 163, 0.14), transparent 36%),
+    linear-gradient(180deg, #143326 0%, #0f2f23 68%, #133d2d 100%);
+}
+
+.ods-section.refined {
+  position: relative;
+  margin-block: 0;
+  box-shadow:
+    inset 0 18px 80px rgba(0, 0, 0, 0.16),
+    inset 0 -18px 80px rgba(0, 0, 0, 0.18);
+}
+
+.projects-teaser.refined {
+  background:
+    radial-gradient(circle at 80% 8%, rgba(103, 190, 193, 0.18), transparent 34%),
+    linear-gradient(180deg, #133d2d 0%, #123a5a 34%, #102f4d 100%);
+}
+
+.solarpunk-scroll-hint {
+  margin-top: -1.2rem;
+}
+
+.solarpunk-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 72%;
+  gap: 0.8rem;
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 0.7rem 5rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.solarpunk-strip figure {
+  position: relative;
+  min-height: 330px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(216, 240, 163, 0.16);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.06);
+  scroll-snap-align: center;
+}
+
+.solarpunk-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solarpunk-strip figcaption {
+  position: absolute;
+  left: 0.7rem;
+  bottom: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.46rem 0.64rem;
+  border-radius: 999px;
+  color: var(--forest-950);
+  background: var(--lime-soft);
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.sao-section.refined::after {
+  background: linear-gradient(180deg, rgba(28, 23, 17, 0), #143326 82%, #143326);
+}
+
+@media (min-width: 720px) {
+  .solarpunk-strip {
+    grid-auto-columns: 28%;
+    padding-inline: max(1rem, calc((100vw - 1120px) / 2));
+  }
+
+  .solarpunk-strip figure {
+    min-height: 360px;
+  }
+
+  .solarpunk-strip figure.wide {
+    grid-column: span 2;
+    min-width: 620px;
   }
 }

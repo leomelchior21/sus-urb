@@ -801,27 +801,17 @@ function FourEsSection({ language }: { language: Language }) {
 
 export function StoryExperience({ language }: { language: Language }) {
   const [activeOds, setActiveOds] = useState(odsOptions[0]);
-  const [activeSolarImage, setActiveSolarImage] = useState(0);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const { scrollYProgress } = useScroll();
   const background = useTransform(
     scrollYProgress,
-    [0, 0.1, 0.18, 0.28, 0.42, 0.55, 0.72, 1],
-    ["#061912", "#12281e", "#3b0508", "#5a070d", "#43070a", "#0f2f23", "#174d36", "#123a5a"]
+    [0, 0.1, 0.18, 0.3, 0.42, 0.82, 0.93, 1],
+    ["#061912", "#12281e", "#3b0508", "#5a070d", "#173d2d", "#173d2d", "#123a5a", "#123a5a"]
   );
-  const solarTiles = solarpunkImages.map((_, tileIndex) => solarpunkImages[(activeSolarImage + tileIndex) % solarpunkImages.length]);
   const odsStyle = {
     "--ods-color": activeOds.color,
     "--ods-ink": activeOds.ink
   } as CSSProperties;
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveSolarImage((current) => (current + 1) % solarpunkImages.length);
-    }, 2000);
-
-    return () => window.clearInterval(timer);
-  }, []);
 
   return (
     <main className="one-page">
@@ -991,24 +981,28 @@ export function StoryExperience({ language }: { language: Language }) {
             );
           })}
         </div>
-        <motion.div className="solarpunk-mosaic" {...reveal}>
-          {solarTiles.map((image, index) => (
-            <figure key={`${index}-${image.src}`} className={`solar-photo-tile tile-${index + 1}`}>
-                <Image
-                  key={image.src}
-                  src={image.src}
-                  alt={`${image.label[language]} ${language === "en" ? "solarpunk visual reference." : "referência visual solarpunk."}`}
-                  width={620}
-                  height={460}
-                  sizes="(max-width: 760px) 42vw, 210px"
-                  unoptimized={image.src.endsWith(".jfif")}
-                />
-                <figcaption>
-                  <SunMedium size={15} aria-hidden="true" />
-                  {image.label[language]}
-                </figcaption>
-              </figure>
-            ))}
+        <div className="side-scroll-hint solarpunk-scroll-hint" aria-hidden="true">
+          <span>{language === "en" ? "Swipe" : "Deslize"}</span>
+          <i />
+          <span>{language === "en" ? "solar references" : "referências solares"}</span>
+        </div>
+        <motion.div className="solarpunk-strip" {...reveal}>
+          {solarpunkImages.map((image, index) => (
+            <figure key={image.src} className={index === 0 || index === 4 ? "wide" : ""}>
+              <Image
+                src={image.src}
+                alt={`${image.label[language]} ${language === "en" ? "solarpunk visual reference." : "referência visual solarpunk."}`}
+                width={920}
+                height={660}
+                sizes="(max-width: 760px) 72vw, 30vw"
+                unoptimized={image.src.endsWith(".jfif")}
+              />
+              <figcaption>
+                <SunMedium size={15} aria-hidden="true" />
+                {image.label[language]}
+              </figcaption>
+            </figure>
+          ))}
         </motion.div>
         <GuidingQuestion topic="Solarpunk" language={language} />
         <SectionSources
